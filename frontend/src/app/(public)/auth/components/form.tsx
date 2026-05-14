@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { z } from "zod"
 import { Spinner } from "@/components/ui/spinner"
 import { useRouter } from "next/navigation"
+import servicesAuth from "@/server/(POST)-auth"
 
 export default function Form(): JSX.Element {
   const router = useRouter()
@@ -32,8 +33,12 @@ export default function Form(): JSX.Element {
 
   const onSubmit = (): void => {
     startSubmit(async () => {
-      // => Simulando a requisição para o Backend (servidor)
-      await new Promise((resolve) => setTimeout(resolve, 5000))
+      const response = await servicesAuth(form.getValues())
+      // => Verificação em caso de erro
+      if ("isError" in response) { return }
+      // => Armazenando o token no localStorage
+      localStorage.setItem("token", response.token)
+      localStorage.setItem("cnpj", response.cnpj)
       router.push("/materials-and-brands")
     })
   }

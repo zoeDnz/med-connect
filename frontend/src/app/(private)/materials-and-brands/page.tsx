@@ -10,44 +10,35 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { MatMed } from "@/types"
+import servicesGetMaterialsAndBrands from "@/server/(GET)-materials-and-brands"
 
 export default function MaterialsAndBrands() {
-  const [isPending, startTransition] = useTransition()
-  // => Guardando as informações que vem do Backend para renderizar na tela
-  const [materialsBrands, setMaterialsBrands] = useState<any>()
+  const [materials, setMaterials] = useState<MatMed[]>()
 
-  async function servicesGetMaterialsAndBrands() {
-    // => Fazendo a requisição para o Backend
-    const response = await fetch("http://localhost:8000/mat_med", {
-      headers: {
-        // => Gerando exemplo aleatório de Token
-        Authorization: `Bearer ${Math.random().toString(36).substring(2)}`
-      }
-    })
-    // => Transformando os dados do Backend em formato JSON
-    const data = await response.json()
-    setMaterialsBrands(data)
-  }
-
-  // => Função que executa sempre que a página é carregada
+  // => A primeira função chamada quando a tela é carregada
   useEffect(() => {
-    startTransition(async () => {
-      await servicesGetMaterialsAndBrands()
+    servicesGetMaterialsAndBrands().then((response) => {
+      if ("isError" in response) { return }
+      setMaterials(response)
     })
   }, [])
 
   return (
     <div className="w-full grid grid-cols-4 gap-8 py-14 px-12">
-      {materialsBrands && materialsBrands.length > 0 && materialsBrands.map((item: any) => {
+      {materials && !("isError" in materials) && materials.length > 0 && materials.map((material: MatMed, index: number) => {
         return (
-          <Card className="flex flex-col justify-between">
+          <Card
+            key={index}
+            className="flex flex-col justify-between"
+          >
             <CardHeader>
-              <CardTitle>{item.ds_mat}</CardTitle>
-              <CardDescription>Id da Marca: {item.ds_marca}</CardDescription>
-              <CardAction>Tipo: {item.ds_tipo}</CardAction>
+              <CardTitle>{material.ds_mat}</CardTitle>
+              <CardDescription>Id da Marca: {material.ds_marca}</CardDescription>
+              <CardAction>Tipo: {material.ds_tipo}</CardAction>
             </CardHeader>
             <CardContent>
-              <p>Id da pessoa Jurídica:{item.ds_pessoaj}</p>
+              <p>Id da pessoa Jurídica:{material.ds_pessoaj}</p>
             </CardContent>
             <CardFooter>
               <Button

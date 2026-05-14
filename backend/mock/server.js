@@ -255,10 +255,11 @@ function listCreate(collection, pkField) {
 
 // POST /authentication/token/
 app.post('/authentication/token/', (req, res) => {
+  console.log(req)
   // Accept any credentials — mirrors the Django endpoint behavior in dev
   return res.json({
-    access: 'fake-access-token',
-    refresh: 'fake-refresh-token',
+    cnpj: req.body.cnpj,
+    token: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyXzEyMyJ9.abc123"
   });
 });
 
