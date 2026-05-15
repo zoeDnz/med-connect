@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState, useTransition } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Card,
   CardAction,
@@ -11,15 +11,19 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { MatMed } from "@/types"
-import servicesGetMaterialsAndBrands from "@/server/(GET)-materials-and-brands"
+import servicesGetMaterials from "@/server/(GET)-materials-and-brands"
 
-export default function MaterialsAndBrands() {
+export default function Materials() {
+  // => Variável de estado para armazenar os materiais médicos
   const [materials, setMaterials] = useState<MatMed[]>()
 
   // => A primeira função chamada quando a tela é carregada
   useEffect(() => {
-    servicesGetMaterialsAndBrands().then((response) => {
+    // => Função que pega os dados do backend
+    servicesGetMaterials().then((response) => {
+      // => Caso de erro, a gente não seta valores e para o processsamento
       if ("isError" in response) { return }
+      // => Seta os valores do backend dentro da variável de estado
       setMaterials(response)
     })
   }, [])

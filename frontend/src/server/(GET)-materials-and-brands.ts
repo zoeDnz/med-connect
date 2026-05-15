@@ -2,7 +2,7 @@
 
 import { MatMed } from "@/types"
 
-export default async function servicesGetMaterialsAndBrands() {
+export default async function servicesGetMaterials() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mat_med`, {
     method: "GET",
     headers: {
@@ -15,7 +15,7 @@ export default async function servicesGetMaterialsAndBrands() {
     const error = {
       isError: true,
       status: response.status,
-      message: "Não foi possível autenticar"
+      message: "Não foi possível obter os materiais"
     }
     return error
   }

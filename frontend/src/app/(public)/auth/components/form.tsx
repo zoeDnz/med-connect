@@ -39,7 +39,7 @@ export default function Form(): JSX.Element {
       // => Armazenando o token no localStorage
       localStorage.setItem("token", response.token)
       localStorage.setItem("cnpj", response.cnpj)
-      router.push("/materials-and-brands")
+      router.push("/materials")
     })
   }
 
