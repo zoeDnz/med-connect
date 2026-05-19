@@ -1,9 +1,9 @@
 "use client"
+import React, { ReactNode, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/ui/toggle-theme"
 import { LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
-import React, { ReactNode, useEffect } from "react"
 
 interface LayoutProps {
   children: ReactNode
@@ -22,8 +22,8 @@ export default function Layout({ children }: LayoutProps) {
   }, [])
 
   return (
-    <div className="w-full h-auto flex flex-col gap-2.5 items-center">
-      <nav className="w-screen h-16 flex items-center justify-between bg-cyan-950 dark:bg-black shadow shadow-zinc-800 px-10">
+    <div className="relative w-full h-auto flex flex-col gap-2.5 items-center">
+      <nav className="fixed w-full h-16 flex items-center justify-between bg-cyan-950 dark:bg-black shadow shadow-zinc-800 px-10">
         <h1 className="font-semibold text-lg text-white">
           MedConnect
         </h1>
@@ -41,7 +41,7 @@ export default function Layout({ children }: LayoutProps) {
           </Button>
         </div>
       </nav>
-      <div className="w-full">
+      <div className="w-full mt-16">
         {children}
       </div>
     </div>

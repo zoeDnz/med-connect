@@ -9,11 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { MatMed } from "@/types"
 import servicesGetMaterials from "@/server/(GET)-materials-and-brands"
 
 export default function Materials() {
+  const router = useRouter()
   // => Variável de estado para armazenar os materiais médicos
   const [materials, setMaterials] = useState<MatMed[]>()
 
@@ -48,6 +50,9 @@ export default function Materials() {
               <Button
                 type="button"
                 variant="default"
+                onClick={() => {
+                  router.push(`/materials/${material.cd_mat}/details?id_pf=${material}`)
+                }}
               >
                 Ver detalhes
               </Button>
