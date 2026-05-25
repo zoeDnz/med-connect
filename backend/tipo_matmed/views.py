@@ -7,3 +7,8 @@ class TipoMatMedCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset =  TipoMatMed.objects.all()
     serializer_class = TipoMatMedSerializer
+    
+class TipoMatMedRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = TipoMatMed.objects.all()
+    serializer_class = TipoMatMedSerializer

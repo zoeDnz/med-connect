@@ -39,38 +39,35 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'rest_framework',
-    'corsheaders',
     'rest_framework_simplejwt',
+    'corsheaders',
     
     'mat_med',
-    'fornecedor',
+    'fabricante',
     'lote',
     'marcas',
-    'mensagens',
-    'plano',
     'tipo_matmed',
     'negociacao',
     'pessoa_juridica',
+    'anuncio',
     
     'authentication',
+    'statistics_api',
+    #'gemini_api',
     
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",  # TEM QUE SER O PRIMEIRO
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'app.urls'
 
@@ -97,12 +94,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'logincnpj',
-        'USER': 'postgres',
-        'PASSWORD': "12345",
-        'HOST': 'localhost',
-        'PORT': '5432',
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': BASE DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'bdMedConnect',
+            'USER': 'postgres',
+            'PASSWORD': "123456",
+            'HOST': 'localhost',
+            'PORT': '5432',
     }
 }
 
@@ -143,8 +142,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-REST_FRAMEWORK = {    
-    'DEFAULT_AUTHENTICATION_CLASSES': (        
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )   
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'authentication.auth.CustomJWTAuthentication',
+    )
 }

@@ -7,3 +7,8 @@ class NegocicaoCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset =  Negociacao.objects.all()
     serializer_class = NegociacaoSerializer
+
+class NegociacaoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Negociacao.objects.all()
+    serializer_class = NegociacaoSerializer

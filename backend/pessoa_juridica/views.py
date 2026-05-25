@@ -7,3 +7,8 @@ class PessoaJuridicaCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset =  PessoaJuridica.objects.all()
     serializer_class = PessoaJuridicaSerializer
+    
+class PessoaJuridicaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = PessoaJuridica.objects.all()
+    serializer_class = PessoaJuridicaSerializer

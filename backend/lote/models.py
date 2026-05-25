@@ -1,5 +1,5 @@
 from django.db import models
-from fornecedor.models import Fornecedor
+from fabricante.models import Fabricante
 from mat_med.models import MatMed
 from pessoa_juridica.models import PessoaJuridica
 
@@ -10,7 +10,7 @@ class Lote(models.Model):
     qtd_lote = models.IntegerField()
     unidade_med = models.CharField(max_length=20)
     
-    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.RESTRICT, related_name='lotes')
+    fabricante = models.ForeignKey(Fabricante, on_delete=models.RESTRICT, related_name='lotes')
     cd_material = models.ForeignKey(MatMed, on_delete=models.RESTRICT, related_name='lotes')
     cd_pessoaj = models.ForeignKey(PessoaJuridica, on_delete=models.RESTRICT, related_name='pessoas_jur')
     

@@ -7,3 +7,8 @@ class MarcasCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset =  Marcas.objects.all()
     serializer_class = MarcasSerializer
+    
+class MarcasRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Marcas.objects.all()
+    serializer_class = MarcasSerializer

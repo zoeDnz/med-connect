@@ -1,38 +1,25 @@
 from django.contrib import admin
-from django.urls import path
-from django.contrib.auth import views as auth_views
-from fornecedor.views import FornecedorCreateListView
-from lote.views import LoteCreateListView
-from marcas.views import MarcasCreateListView
-from mat_med.views import MatMedCreateListView
-from mat_med.views import MatMedRetrieveUpateDestroyView
-from mensagens.views import MensagensCreateListView
-from negociacao.views import NegocicaoCreateListView
-from pessoa_juridica.views import PessoaJuridicaCreateListView
-from plano.views import PlanoCreateListView
-from tipo_matmed.views import TipoMatMedCreateListView
-
+from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from statistics_api.views import ApiStatsView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
- 
-    path('fornecedor/', FornecedorCreateListView.as_view(), name='fornecedor-create-list'),
-    path('lote/', LoteCreateListView.as_view(), name='lote-create-list'),
-    path('marcas/', MarcasCreateListView.as_view(), name='marcas-create-list'),
-    path('mat_med/', MatMedCreateListView.as_view(), name='mat_med-create-list'),
-    path('mat_med/<int:pk>', MatMedRetrieveUpateDestroyView.as_view(), name='mat_med-detail-list'),
-    path('mensagens/', MensagensCreateListView.as_view(), name='mensagens-create-list'),
-    path('negociacao/', NegocicaoCreateListView.as_view(), name='negociacao-create-list'),
-    path('pessoa_juridica/', PessoaJuridicaCreateListView.as_view(), name='pessoa_juridica-create-list'),
-    path('plano/', PlanoCreateListView.as_view(), name='plano-create-list'),
-    path('tipo_matmed/', TipoMatMedCreateListView.as_view(), name='tipo_matmed-create-list'),  
-    
+    path('api/medconnect/', include('fabricante.urls')),
+    path('api/medconnect/', include('lote.urls')),
+    path('api/medconnect/', include('marcas.urls')),
+    path('api/medconnect/', include('mat_med.urls')),
+    path('api/medconnect/', include('negociacao.urls')),
+    path('api/medconnect/', include('pessoa_juridica.urls')),
+    path('api/medconnect/', include('anuncio.urls')),
+    path('api/medconnect/', include('tipo_matmed.urls')),
+    path('api/medconnect/', include('gemini_api.urls')),
+    path('authentication/', include('authentication.urls')),
+
     path('authentication/token/', TokenObtainPairView.as_view(), name='token-obtain-pair'),
-    
     path('authentication/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-
     path('authentication/token/verify/', TokenVerifyView.as_view(), name='token-verify'),
-    
-]
 
+    path('statistics/', ApiStatsView.as_view(), name='stats-view'),
+]

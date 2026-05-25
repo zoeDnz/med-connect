@@ -4,7 +4,7 @@ from tipo_matmed.models import TipoMatMed
 from pessoa_juridica.models import PessoaJuridica
 
 class MatMed(models.Model):
-    cd_mat = models.IntegerField(primary_key=True, blank=False, null= False)
+    cd_mat = models.AutoField(primary_key=True)
     ds_mat = models.CharField(blank=False, null= False)
     
     ds_marca = models.ForeignKey(Marcas, on_delete=models.RESTRICT, related_name='materiais')

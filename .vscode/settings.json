@@ -100,7 +100,7 @@
         ".vscode": true
         // "node_modules": true
     },
-    "workbench.iconTheme": "symbols",
+    "workbench.iconTheme": "vs-seti",
     "update.mode": "start",
     "terminal.integrated.gpuAcceleration": "off",
     "terminal.integrated.defaultProfile.osx": "fish",
@@ -228,6 +228,6 @@
         "Usuario",
         "WEBPUSH"
     ],
-    "workbench.colorTheme": "Min Dark",
+    "workbench.colorTheme": "Dracula Theme",
     "workbench.statusBar.visible": true
 }
