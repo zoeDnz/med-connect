@@ -6,3 +6,10 @@ export interface TipoMatMed {
   cd_tipo: TipoMatMedCodigo
   ds_tipo: TipoMatMedDescricao
 }
+
+export interface CreateTipoMatMedForm {
+  cd_tipo: TipoMatMedCodigo
+  ds_tipo: TipoMatMedDescricao
+}
+
+export type UpdateTipoMatMedForm = Partial<CreateTipoMatMedForm>

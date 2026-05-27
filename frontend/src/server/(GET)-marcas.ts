@@ -1,6 +1,6 @@
 "use client"
 
-import { Fabricante } from "../types"
+import { Marca } from "@/types"
 
 declare const process: {
   env: {
@@ -8,10 +8,10 @@ declare const process: {
   }
 }
 
-export default async function servicesGetFornecedores() {
+export default async function servicesGetMarcas() {
   const token = localStorage.getItem("token")
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/medconnect/fabricante/`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/medconnect/marcas/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -23,11 +23,11 @@ export default async function servicesGetFornecedores() {
     const error = {
       isError: true,
       status: response.status,
-      message: "Não foi possível ver mais informações sobre este fabricante!"
+      message: "Não foi possível ver mais informações sobre marcas!"
     }
     return error
   }
 
-  const data: Fabricante[] = await response.json()
+  const data: Marca[] = await response.json()
   return data
 }

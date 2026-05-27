@@ -10,3 +10,12 @@ export interface MatMed {
   /** FK → PessoaJuridica.cd_pessoaj */
   ds_pessoaj: number
 }
+
+export interface CreateMatMedForm {
+  ds_mat: string
+  ds_marca: number
+  ds_tipo: TipoMatMedCodigo
+  ds_pessoaj: number
+}
+
+export type UpdateMatMedForm = Partial<CreateMatMedForm>

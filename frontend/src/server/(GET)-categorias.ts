@@ -1,6 +1,6 @@
 "use client"
 
-import { Fabricante } from "../types"
+import { TipoMatMed } from "@/types"
 
 declare const process: {
   env: {
@@ -8,10 +8,10 @@ declare const process: {
   }
 }
 
-export default async function servicesGetFornecedores() {
+export default async function servicesGetCategorias() {
   const token = localStorage.getItem("token")
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/medconnect/fabricante/`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/medconnect/tipo_matmed/`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -23,11 +23,11 @@ export default async function servicesGetFornecedores() {
     const error = {
       isError: true,
       status: response.status,
-      message: "Não foi possível ver mais informações sobre este fabricante!"
+      message: "Não foi possível ver mais informações sobre tipos de material!"
     }
     return error
   }
 
-  const data: Fabricante[] = await response.json()
+  const data: TipoMatMed[] = await response.json()
   return data
 }

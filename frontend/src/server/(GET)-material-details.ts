@@ -1,8 +1,10 @@
 "use client"
 
+import { MatMed } from "@/types"
+
 export default async function servicesGetMaterialDetails(
   materialId: string
-) {
+): Promise<MatMed | { isError: true; status: number }> {
   const token = localStorage.getItem("token")
 
   const response = await fetch(
@@ -23,5 +25,5 @@ export default async function servicesGetMaterialDetails(
     }
   }
 
-  return await response.json()
+  return await response.json() as MatMed
 }

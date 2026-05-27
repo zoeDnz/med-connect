@@ -6,6 +6,15 @@ export interface PessoaJuridica {
   resp_tec: string
   nr_cnpj: string
   razao_social: string
-  /** FK → Plano.cd_plano */
-  ds_plano: number
 }
+
+export interface CreatePessoaJuridicaForm {
+  nm_pessoaj: string
+  email_pj: string
+  senha_pj: string
+  resp_tec: string
+  nr_cnpj: string
+  razao_social: string
+}
+
+export type UpdatePessoaJuridicaForm = Partial<CreatePessoaJuridicaForm>

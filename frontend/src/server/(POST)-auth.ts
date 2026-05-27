@@ -1,14 +1,14 @@
 "use client"
 
-interface ServicesAuthProps {
-  cnpj: string
-  password: string
-}
+import { AuthLoginRequest, AuthLoginResponse } from "@/types"
 
 export default async function servicesAuth({
   cnpj,
   password
-}: ServicesAuthProps) {
+}: AuthLoginRequest): Promise<
+  AuthLoginResponse |
+  { isError: true; status: number; message: string }
+> {
   const baseURL = process.env.NEXT_PUBLIC_API_URL
 
   if (!baseURL) {
@@ -41,5 +41,5 @@ export default async function servicesAuth({
     }
   }
 
-  return data
+  return data as AuthLoginResponse
 }
