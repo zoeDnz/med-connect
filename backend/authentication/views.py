@@ -41,7 +41,8 @@ def login(request):
     refresh["name"] = user.nm_pessoaj
 
     return Response({
-        "cnpj": user.nr_cnpj,
-        "access": str(refresh.access_token),
-        "refresh": str(refresh),
-    }, status=status.HTTP_200_OK)
+    "id": user.cd_pessoaj,
+    "cnpj": user.nr_cnpj,
+    "access": str(refresh.access_token),
+    "refresh": str(refresh),
+    })

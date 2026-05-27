@@ -2,11 +2,11 @@
 
 import React, { ReactNode } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation" // <-- Importado o hook
-import { 
-  Info, 
-  HelpCircle, 
-  CreditCard 
+import { usePathname } from "next/navigation"
+import {
+  Info,
+  HelpCircle,
+  CreditCard
 } from "lucide-react"
 
 import { ModeToggle } from "@/components/ui/toggle-theme"
@@ -23,81 +23,92 @@ interface PublicLayoutProps {
 }
 
 export default function PublicLayout({ children }: PublicLayoutProps) {
-  // Pegamos o caminho atual da URL
   const pathname = usePathname()
-  
-  // Verificamos se estamos na rota /auth
   const isAuthPage = pathname === "/auth"
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-zinc-50 text-zinc-900 font-sans antialiased selection:bg-cyan-500/20 dark:bg-black dark:text-zinc-100 scroll-smooth">
-      
-      {/* NAVBAR PÚBLICA */}
-      <nav className="w-full h-16 flex items-center justify-between bg-sky-950 shadow-md shadow-zinc-950/5 px-6 md:px-10 z-50 sticky top-0 dark:bg-zinc-950">
+
+      {/* NAVBAR */}
+      <nav className="w-full h-16 flex items-center justify-between bg-sky-950 shadow-md px-6 md:px-10 z-50 sticky top-0 dark:bg-zinc-950">
 
         {/* LOGO */}
         <div className="flex items-center">
-          <Link href="/" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
+          <Link
+            href="/"
+            className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity"
+          >
             MedConnect
           </Link>
         </div>
 
-        {/* MENU PRINCIPAL (Âncoras da Landing Page) */}
+        {/* MENU */}
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center text-sm font-semibold text-zinc-300">
+
           <NavigationMenu>
             <NavigationMenuList className="flex gap-2">
 
-              {/* SOBRE NÓS */}
+              {/* SOBRE */}
               <NavigationMenuItem>
-                <Link href="/#sobre"  passHref>
-                  <NavigationMenuLink className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full bg-transparent text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm group/sobre select-none data-active:bg-white/10">
-                    <Info size={16} className="text-zinc-400 group-hover/sobre:text-white transition-colors" />
+                <NavigationMenuLink>
+                  <Link
+                    href="/#sobre"
+                    className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
+                  >
+                    <Info size={16} className="text-zinc-400" />
                     Sobre Nós
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               {/* COMO FUNCIONA */}
               <NavigationMenuItem>
-                <Link href="/#como-funciona" passHref>
-                  <NavigationMenuLink className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full bg-transparent text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm group/como select-none data-active:bg-white/10">
-                    <HelpCircle size={16} className="text-zinc-400 group-hover/como:text-white transition-colors" />
+                <NavigationMenuLink>
+                  <Link
+                    href="/#como-funciona"
+                    className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
+                  >
+                    <HelpCircle size={16} className="text-zinc-400" />
                     Como Funciona
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               {/* PLANOS */}
               <NavigationMenuItem>
-                <Link href="/#planos"  passHref>
-                  <NavigationMenuLink className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full bg-transparent text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm group/planos select-none data-active:bg-white/10">
-                    <CreditCard size={16} className="text-zinc-400 group-hover/planos:text-white transition-colors" />
+                <NavigationMenuLink>
+                  <Link
+                    href="/#planos"
+                    className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
+                  >
+                    <CreditCard size={16} className="text-zinc-400" />
                     Planos
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
             </NavigationMenuList>
           </NavigationMenu>
+
         </div>
 
-        {/* AÇÕES DIREITA (Botões de Login/Cadastro) */}
-        <div className="flex items-center gap-4 relative">
-          
+        {/* AÇÕES */}
+        <div className="flex items-center gap-4">
+
           <ModeToggle />
 
-          {/* O if de fato (Renderização condicional): Só mostra os botões se NÃO for a página /auth */}
           {!isAuthPage && (
-            <div className="hidden md:flex items-center gap-3 ml-2">
-              <Link 
-                href="/auth" 
-                className="text-sm font-semibold text-zinc-300 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/10"
+            <div className="hidden md:flex items-center gap-3">
+              <Link
+                href="/auth"
+                className="text-sm font-semibold text-zinc-300 hover:text-white px-3 py-1.5 rounded-full hover:bg-white/10"
               >
                 Entrar
               </Link>
-              <Link 
-                href="/auth" 
-                className="flex items-center justify-center bg-sky-800 hover:bg-sky-900 text-white font-bold text-sm tracking-wide px-4 py-2.5 rounded-full transition-all active:scale-[0.98] shadow-inner"
+
+              <Link
+                href="/auth"
+                className="bg-sky-800 hover:bg-sky-900 text-white font-bold text-sm px-4 py-2.5 rounded-full transition-all"
               >
                 Cadastre-se
               </Link>
@@ -107,7 +118,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
         </div>
       </nav>
 
-      {/* CONTEÚDO DA PÁGINA (Landing Page ou Tela de Login) */}
+      {/* CONTEÚDO */}
       <main className="w-full flex-1 flex flex-col items-center">
         {children}
       </main>

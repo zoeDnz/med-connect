@@ -41,6 +41,7 @@ export default function Form(): JSX.Element {
       
       localStorage.setItem("token", response.access)
       localStorage.setItem("cnpj", response.cnpj)
+      localStorage.setItem("userId", String(response.id))
       router.push("/vitrine")
     })
   }

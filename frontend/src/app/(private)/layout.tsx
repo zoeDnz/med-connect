@@ -146,7 +146,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex flex-col gap-2">
             <h2 className="font-extrabold text-xl text-white tracking-wider">MedConnect</h2>
             <p className="text-zinc-400">
-              Conectando pacientes e especialistas com tecnologia e segurança.
+              Conectando quem possui excedentes hospitalares a quem precisa deles, facilitando negociações e transformando recursos ociosos em soluções para toda a rede de saúde.
             </p>
           </div>
           <div className="flex flex-col gap-2">
