@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Search, Tag, Building2, ChevronRight, Stethoscope, PackageX } from "lucide-react"
 import { MatMed } from "@/types"
 import servicesGetMaterials from "@/server/(GET)-materials-and-brands"
+import { useRouter } from "next/navigation"
 
 export default function Materials() {
+  const router = useRouter()
   const [materials, setMaterials] = useState<MatMed[]>([])
   const [search, setSearch] = useState("")
 
@@ -109,13 +111,15 @@ export default function Materials() {
 
                 {/* Botão de Ação */}
                 <CardFooter className="p-1 pt-1 mt-auto">
-                  <Button
-                    className="w-full bg-cyan-700 hover:bg-cyan-900 text-white font-semibold rounded-xl h-12 transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-sm active:scale-[0.98]"
-                  >
-                    Ver detalhes
-                    <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                  </Button>
-                </CardFooter>
+                <Button
+                  onClick={() => router.push(`/cadastrar-insumos/${material.cd_mat}`)}
+                  className="w-full bg-cyan-700 hover:bg-cyan-900 text-white font-semibold rounded-xl h-12 transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-sm active:scale-[0.98]"
+                >
+                  Ver detalhes
+
+                  <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </Button>
+              </CardFooter>
               </Card>
             ))
           ) : (
