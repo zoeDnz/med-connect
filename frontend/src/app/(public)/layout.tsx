@@ -50,40 +50,37 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
               {/* SOBRE */}
               <NavigationMenuItem>
-                <NavigationMenuLink>
-                  <Link
+                <NavigationMenuLink
                     href="/#sobre"
                     className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
                   >
                     <Info size={16} className="text-zinc-400" />
                     Sobre Nós
-                  </Link>
+
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               {/* COMO FUNCIONA */}
               <NavigationMenuItem>
-                <NavigationMenuLink>
-                  <Link
+                <NavigationMenuLink
                     href="/#como-funciona"
                     className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
                   >
                     <HelpCircle size={16} className="text-zinc-400" />
                     Como Funciona
-                  </Link>
+
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               {/* PLANOS */}
               <NavigationMenuItem>
-                <NavigationMenuLink>
-                  <Link
+                <NavigationMenuLink
                     href="/#planos"
                     className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
                   >
                     <CreditCard size={16} className="text-zinc-400" />
                     Planos
-                  </Link>
+
                 </NavigationMenuLink>
               </NavigationMenuItem>
 

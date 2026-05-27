@@ -60,13 +60,8 @@ export default function MaterialDetails() {
         </p>
 
         <p>
-          <strong>Fornecedor:</strong>{" "}
+          <strong>Fabricante:</strong>{" "}
           {material?.ds_pessoaj ?? "Carregando..."}
-        </p>
-
-        <p>
-          <strong>Descrição:</strong>{" "}
-          {"A ser implementada..."}
         </p>
 
       </div>
