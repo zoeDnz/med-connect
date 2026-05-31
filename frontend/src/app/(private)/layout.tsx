@@ -1,7 +1,7 @@
 "use client"
 
 import React, { ReactNode, useEffect, useState } from "react"
-import servicesGetMinhaPessoaJuridica from "@/server/getMinhaPessoaJuridica"
+import servicesGetMinhaPessoaJuridica from "@/server/(GET)-minha-pessoa-juridica"
 import { PessoaJuridica } from "@/types"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"

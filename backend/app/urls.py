@@ -21,4 +21,5 @@ urlpatterns = [
     path('authentication/token/verify/', TokenVerifyView.as_view(), name='token-verify'),
 
     path('statistics/', ApiStatsView.as_view(), name='stats-view'),
+    
 ]
