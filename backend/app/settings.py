@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'lote',
     'marcas',
     'tipo_matmed',
-    'negociacao',
     'pessoa_juridica',
     'anuncio',
     

@@ -14,7 +14,6 @@ class MatMed(models.Model):
     ds_pessoaj = models.ForeignKey(PessoaJuridica, on_delete=models.RESTRICT, related_name='materiais')
     
     
-    
     def __str__(self):
         return str(self.ds_mat)
     

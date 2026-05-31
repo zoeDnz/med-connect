@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import GerarDescricaoNegociacaoView
+from .views import GerarDescricaoAnuncioView
 
 urlpatterns = [
-    path('gerar-anuncio/', GerarDescricaoNegociacaoView.as_view(), name='api_gerar_anuncio'),
+    path('gerar-anuncio/', GerarDescricaoAnuncioView.as_view(), name='api_gerar_anuncio'),
 ]

@@ -12,3 +12,5 @@ class PessoaJuridicaRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView)
     permission_classes = (IsAuthenticated,)
     queryset = PessoaJuridica.objects.all()
     serializer_class = PessoaJuridicaSerializer
+
+    

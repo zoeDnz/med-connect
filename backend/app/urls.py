@@ -10,7 +10,6 @@ urlpatterns = [
     path('api/medconnect/', include('lote.urls')),
     path('api/medconnect/', include('marcas.urls')),
     path('api/medconnect/', include('mat_med.urls')),
-    path('api/medconnect/', include('negociacao.urls')),
     path('api/medconnect/', include('pessoa_juridica.urls')),
     path('api/medconnect/', include('anuncio.urls')),
     path('api/medconnect/', include('tipo_matmed.urls')),

@@ -11,25 +11,25 @@ from pessoa_juridica.models import PessoaJuridica
 
 load_dotenv()
 
-class GerarDescricaoNegociacaoView(APIView):
+class GerarDescricaoAnuncioView(APIView):
     def post(self, request):
         dados = request.data
         
         nr_lote_id = dados.get('nr_lote')
         cd_mat_id = dados.get('cd_mat')
-        cd_negociante_id = dados.get('cd_negociante')
-        qtd_solicitada = dados.get('qtd_matmed') 
+        cd_pessoa_anunciante  = dados.get('cd_pessoa_anunciante')
+        qtd_solicitada = dados.get('qtd_mat') 
 
-        if not all([nr_lote_id, cd_mat_id, cd_negociante_id, qtd_solicitada]):
+        if not all([nr_lote_id, cd_mat_id, cd_pessoa_anunciante, qtd_solicitada]):
             return Response(
-                {"erro": "Faltam parâmetros obrigatórios (nr_lote, cd_mat, cd_negociante, qtd_matmed)."}, 
+                {"erro": "Faltam parâmetros obrigatórios (nr_lote, cd_mat, cd_pessoa_anunciante, qtd_mat)."}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
             lote = Lote.objects.get(nr_lote=nr_lote_id)
             material = MatMed.objects.get(cd_mat=cd_mat_id)
-            hospital_vendedor = PessoaJuridica.objects.get(cd_pessoaj=cd_negociante_id)
+            hospital_anunciante = PessoaJuridica.objects.get(cd_pessoaj=cd_pessoa_anunciante)
             
             marca_nome = material.ds_marca.ds_marca  
             tipo_nome = material.ds_tipo.ds_tipo    
