@@ -1,6 +1,8 @@
 "use client"
 
-import React, { ReactNode, useEffect } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
+import servicesGetMinhaPessoaJuridica from "@/server/getMinhaPessoaJuridica"
+import { PessoaJuridica } from "@/types"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
 import { 
@@ -39,13 +41,32 @@ export default function Layout({ children }: LayoutProps) {
   const router = useRouter()
   const pathname = usePathname() // Hook para pegar a rota atual
 
+  const [empresa, setEmpresa] =
+  useState<PessoaJuridica | null>(null)
+
   useEffect(() => {
     const isAuthenticated = !!localStorage.getItem("token")
 
     if (!isAuthenticated) {
       router.push("/auth")
+      return
     }
-  }, [router])
+
+    async function carregarEmpresa() {
+      const result =
+        await servicesGetMinhaPessoaJuridica()
+
+      if (
+        result &&
+        typeof result === "object" &&
+        !("isError" in result)
+      ) {
+        setEmpresa(result)
+      }
+    }
+
+  carregarEmpresa()
+}, [router])
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-zinc-50 text-zinc-900 font-sans antialiased selection:bg-cyan-500/20 dark:bg-black dark:text-zinc-100">
@@ -96,9 +117,11 @@ export default function Layout({ children }: LayoutProps) {
             {/* Passamos as classes diretamente para o Trigger, eliminando a prop asChild e o botão interno */}
             <DropdownMenuTrigger className="flex items-center gap-2.5 bg-white/10 hover:bg-white/20 focus:outline-none pl-1.5 pr-4 py-1.5 rounded-full transition-all text-white border border-transparent hover:border-white/10 active:scale-[0.98] cursor-pointer outline-none ring-0">
               <div className="w-8 h-8 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-inner">
-                US
+                {empresa?.nm_pessoaj?.substring(0, 2).toUpperCase() ?? "PJ"}
               </div>
-              <span className="text-sm font-semibold tracking-wide">Perfil</span>
+              <span className="text-sm font-semibold tracking-wide">
+                {empresa?.nm_pessoaj ?? "Perfil"}
+              </span>
               <ChevronDown size={14} className="text-zinc-300 transition-transform duration-300" />
             </DropdownMenuTrigger>
 
