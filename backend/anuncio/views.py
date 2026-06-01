@@ -1,9 +1,20 @@
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.response import Response
 from anuncio.models import Anuncio
 from anuncio.serializers import AnuncioSerializer
 
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def meus_anuncios(request):
+    anuncios = Anuncio.objects.filter(
+        cd_pessoa_anunciante=request.user
+    )
+
+    serializer = AnuncioSerializer(anuncios, many=True)
+    return Response(serializer.data)
 
 class AnuncioCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -45,7 +56,7 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         anuncio = serializer.save()
 
-        # A -> F
+        # A → F: proposta igual ao valor base, finaliza automaticamente
         if (
             status_anterior == 'A'
             and anuncio.val_proposta
@@ -55,7 +66,7 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.val_aceito = anuncio.val_base
             anuncio.save()
 
-        # A -> N
+        # A → N: proposta diferente do valor base, fica em andamento
         elif (
             status_anterior == 'A'
             and anuncio.val_proposta
@@ -64,7 +75,8 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.ie_status = 'N'
             anuncio.save()
 
-        # N -> F
+        # N → F: anunciante aceitou proposta diferente
+        # Frontend manda: ie_status = 'F' + cd_pessoa_compradora
         elif (
             status_anterior == 'N'
             and anuncio.ie_status == 'F'
@@ -72,7 +84,8 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.val_aceito = anuncio.val_proposta
             anuncio.save()
 
-        # N -> A
+        # N → A: anunciante recusou, limpa tudo e volta ativo
+        # Frontend manda: ie_status = 'A'
         elif (
             status_anterior == 'N'
             and anuncio.ie_status == 'A'
