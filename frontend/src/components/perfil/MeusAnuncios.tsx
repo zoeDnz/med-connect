@@ -5,8 +5,13 @@ import servicesGetMeusAnuncios from "@/server/(GET)-meus-anuncios"
 import { Anuncio } from "@/types"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, ExternalLink, PackageX } from "lucide-react"
+import { Search, ExternalLink, PackageX, ShoppingCart } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ChevronRight } from "lucide-react"
+import { MatMed } from "@/types"
+import servicesGetMeusMaaterials from "@/server/(GET)-meus-materiais" 
+
 
 export default function MeusAnuncios() {
   const router = useRouter()
@@ -14,16 +19,17 @@ export default function MeusAnuncios() {
   const [anuncios, setAnuncios] = useState<Anuncio[]>([])
   const [search, setSearch] = useState("")
   const [loading, setLoading] = useState(true)
+  const [materiais, setMateriais] = useState<MatMed[]>([])
 
-  useEffect(() => {
+useEffect(() => {
     async function load() {
-      const result = await servicesGetMeusAnuncios()
+      const [anunciosResult, materiaisResult] = await Promise.all([
+        servicesGetMeusAnuncios(),
+        servicesGetMeusMaaterials(),
+      ])
 
-      console.log("RESULT ANUNCIOS:", result)
-
-      if (Array.isArray(result)) {
-        setAnuncios(result)
-      }
+      if (Array.isArray(anunciosResult)) setAnuncios(anunciosResult)
+      if (Array.isArray(materiaisResult)) setMateriais(materiaisResult)
 
       setLoading(false)
     }
@@ -31,15 +37,22 @@ export default function MeusAnuncios() {
     load()
   }, [])
 
-  const filteredAnuncios = useMemo(() => {
-    return anuncios.filter((a) =>
-      a.nr_anuncio?.toString().includes(search.toLowerCase())
-    )
-  }, [anuncios, search])
+  // Mapa cd_mat → ds_mat para lookup O(1)
+  const materiaisMap = useMemo(() => {
+    return new Map(materiais.map((m) => [m.cd_mat, m.ds_mat]))
+  }, [materiais])
 
-  if (loading) {
-    return <p className="text-zinc-500">Carregando anúncios...</p>
-  }
+  const filteredAnuncios = useMemo(() => {
+    const term = search.toLowerCase()
+    return anuncios.filter((a) => {
+      const nome = materiaisMap.get(a.cd_mat)?.toLowerCase() ?? ""
+      return (
+        a.nr_anuncio?.toString().includes(term) ||
+        nome.includes(term)
+      )
+    })
+  }, [anuncios, materiaisMap, search])
+
 
   return (
     <div className="min-h-screen bg-slate-50 w-full">
@@ -51,7 +64,7 @@ export default function MeusAnuncios() {
             <div className="relative w-full md:w-96 group">
               <Search className="absolute left-3.5 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-cyan-900 transition-colors duration-300" />
               <Input
-                placeholder="Buscar anúncio por id..." // ideia: permitir busca por descrição também, mas isso exigiria mudar o backend para retornar a descrição do material junto com o anúncio
+                placeholder="Buscar anúncio por id ou nome do material..." // ideia: permitir busca por descrição também
                 className="pl-11 h-12 bg-slate-50 border-slate-200 focus-visible:ring-2 focus-visible:ring-cyan-500/30 focus-visible:border-cyan-900 text-slate-800 placeholder:text-slate-400 rounded-xl shadow-inner transition-all duration-300"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -60,49 +73,99 @@ export default function MeusAnuncios() {
           </div>
 
       {/* Grid */}
-      <div className="grid md:grid-cols-3 gap-6">
-        {filteredAnuncios.length > 0 ? (
-          filteredAnuncios.map((anuncio) => (
-            <div
-              key={anuncio.nr_anuncio}
-              className="bg-white p-6 rounded-xl border shadow-sm"
-            >
-              <span className="text-xs font-bold text-sky-600">
-                ANÚNCIO
-              </span>
+        <div className="grid md:grid-cols-3 gap-6">
+          {filteredAnuncios.length > 0 ? (
+            filteredAnuncios.map((anuncio) => {
+              const nomeMaterial = materiaisMap.get(anuncio.cd_mat) ?? "Material não identificado"
 
-              <h3 className="font-bold mt-2">
-                #{anuncio.nr_anuncio}
-              </h3>
+              return (
+                <Card
+                  key={anuncio.nr_anuncio}
+                  className="group flex flex-col bg-white border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-cyan-500/4 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                >
+                  <div className="h-1 w-full bg-cyan-700" />
 
-              <p className="text-sm text-zinc-500 mt-2">
-                Quantidade: {anuncio.qtd_mat}
+                  <CardHeader className="p-4 pb-3">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-700">
+                        Anúncio #{anuncio.nr_anuncio}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-green-100 text-green-700">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                        Disponível
+                      </span>
+                    </div>
+
+                    {/* Nome do material em destaque */}
+                    <CardTitle className="text-base font-bold text-slate-800 leading-snug line-clamp-2 min-h-[2.75rem] group-hover:text-cyan-700 transition-colors duration-300">
+                      {nomeMaterial}
+                    </CardTitle>
+                  </CardHeader>
+
+                  <div className="h-px bg-slate-100 mx-4" />
+
+                  <CardContent className="p-4 pb-3">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+                      Valor base
+                    </p>
+                    <p className="text-2xl font-black text-slate-800 tracking-tight">
+                      R$ {(anuncio as any).val_base}
+                    </p>
+                  </CardContent>
+
+                  <div className="h-px bg-slate-100 mx-4" />
+
+                  <CardContent className="p-4 pt-3 flex gap-4">
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Quantidade</p>
+                      <p className="text-sm font-semibold text-slate-700 mt-0.5">{anuncio.qtd_mat} un.</p>
+                    </div>
+                    <div className="w-px bg-slate-100" />
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Status</p>
+                      <p className="text-sm font-semibold text-slate-700 mt-0.5">
+                        {anuncio.ie_status === "A" ? "Ativo" : anuncio.ie_status === "F" ? "Finalizado" : "Inativo"}
+                      </p>
+                    </div>
+                  </CardContent>
+
+                  <div className="h-px bg-slate-100 mx-4" />
+
+                  <CardFooter className="p-4 mt-auto">
+                    <Button
+                      onClick={() => router.push(`/anuncio/${anuncio.nr_anuncio}`)}
+                      className="w-full bg-cyan-700 hover:bg-cyan-900 text-white font-semibold rounded-xl h-11 transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-sm active:scale-[0.98]"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      Ver oferta
+                      <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )
+            })
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-20 text-center bg-white rounded-2xl border border-slate-200/60 shadow-sm">
+              <div className="p-4 bg-slate-50 rounded-full mb-4">
+                <PackageX className="w-10 h-10 text-slate-400" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800">Nenhum anúncio encontrado</h3>
+              <p className="text-slate-500 max-w-sm mt-2 text-sm">
+                Não conseguimos encontrar nenhum resultado para{" "}
+                <span className="font-semibold text-slate-700">"{search}"</span>. Tente refinar sua busca.
               </p>
-
-              <p className="text-lg font-bold mt-2">
-                R$ {(anuncio as any).val_base}
-              </p>
-
-              <button
-                onClick={() =>
-                  router.push(`/anuncio/${anuncio.nr_anuncio}`)
-                }
-                className="w-full mt-4 py-2 border rounded-lg flex items-center justify-center gap-2"
-              >
-                <ExternalLink size={14} />
-                Abrir
-              </button>
+              {search && (
+                <Button
+                  variant="link"
+                  onClick={() => setSearch("")}
+                  className="mt-4 text-cyan-600 p-0 h-auto font-semibold"
+                >
+                  Limpar filtro de busca
+                </Button>
+              )}
             </div>
-          ))
-        ) : (
-          <div className="col-span-full text-center py-20">
-            <PackageX className="mx-auto mb-4 text-slate-400" />
-            <p className="text-slate-500">
-              Nenhum anúncio encontrado
-            </p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
     </div>
   )
 }

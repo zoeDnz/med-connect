@@ -3,7 +3,7 @@
 import { Anuncio } from "@/types"
 import { buildUrl, getAuthHeaders, handleResponse, ServiceResult } from "@/server/middleware"
 
-export default async function servicesGetAnuncios(): Promise<ServiceResult<Anuncio[]>> {
+export default async function servicesGetAnuncios(p0: number): Promise<ServiceResult<Anuncio[]>> {
   const response = await fetch(buildUrl("/api/medconnect/anuncio/"), {
     method: "GET",
     headers: getAuthHeaders(),
