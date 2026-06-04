@@ -5,12 +5,24 @@ from rest_framework.response import Response
 from anuncio.models import Anuncio
 from anuncio.serializers import AnuncioSerializer
 
-
+# View que retorna somente os anúncios onde o usuário é o anunciante
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def meus_anuncios(request):
     anuncios = Anuncio.objects.filter(
         cd_pessoa_anunciante=request.user
+    )
+
+    serializer = AnuncioSerializer(anuncios, many=True)
+    return Response(serializer.data)
+
+# View que retorna somente os anúncios onde o usuário é o comprador e o status é 'F' (finalizado)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def minhas_compras(request):
+    anuncios = Anuncio.objects.filter(
+        cd_pessoa_compradora=request.user,
+        ie_status='F'
     )
 
     serializer = AnuncioSerializer(anuncios, many=True)
