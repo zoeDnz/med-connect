@@ -34,6 +34,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
         {/* LOGO */}
         <div className="flex items-center">
+          <img src="../med-icon.svg" alt="MedConnect Logo" className="w-8 h-8 mr-2 ml-0 filter invert" />
           <Link
             href="/"
             className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity"
@@ -51,11 +52,13 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
               {/* SOBRE */}
               <NavigationMenuItem>
                 <NavigationMenuLink
-                    href="/#sobre"
-                    className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
-                  >
-                    <Info size={16} className="text-zinc-400" />
-                    Sobre Nós
+                  href="/#sobre"
+                  className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
+
+
+                >
+                  <Info size={16} className="text-zinc-400" />
+                  Sobre Nós
 
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -63,11 +66,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
               {/* COMO FUNCIONA */}
               <NavigationMenuItem>
                 <NavigationMenuLink
-                    href="/#como-funciona"
-                    className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
-                  >
-                    <HelpCircle size={16} className="text-zinc-400" />
-                    Como Funciona
+                  href="/#como-funciona"
+                  className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
+                >
+                  <HelpCircle size={16} className="text-zinc-400" />
+                  Como Funciona
 
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -75,11 +78,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
               {/* PLANOS */}
               <NavigationMenuItem>
                 <NavigationMenuLink
-                    href="/#planos"
-                    className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
-                  >
-                    <CreditCard size={16} className="text-zinc-400" />
-                    Planos
+                  href="/#planos"
+                  className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
+                >
+                  <CreditCard size={16} className="text-zinc-400" />
+                  Planos
 
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -91,9 +94,6 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
         {/* AÇÕES */}
         <div className="flex items-center gap-4">
-
-          <ModeToggle />
-
           {!isAuthPage && (
             <div className="hidden md:flex items-center gap-3">
               <Link

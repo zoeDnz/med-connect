@@ -76,6 +76,7 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* LOGO */}
         <div className="flex items-center">
+            <img src="../med-icon.svg" alt="MedConnect Logo" className="w-8 h-8 mr-2 ml-0 filter invert" />
           <Link href="/vitrine" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
             MedConnect
           </Link>
@@ -98,7 +99,7 @@ export default function Layout({ children }: LayoutProps) {
                   }
                 `}
               >
-                <Icon 
+                 <Icon 
                   size={16} 
                   className={`transition-colors duration-200 ${isActive ? "text-white" : "text-zinc-400 group-hover:text-white"}`} 
                 />

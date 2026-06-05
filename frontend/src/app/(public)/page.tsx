@@ -4,11 +4,11 @@ import React from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { 
-  HeartHandshake, 
-  PackagePlus, 
-  Search, 
-  CheckCircle2 
+import {
+  HeartHandshake,
+  PackagePlus,
+  Search,
+  CheckCircle2
 } from "lucide-react"
 
 // 1. DADOS EXTRAÍDOS (Facilita a manutenção e limpa o JSX)
@@ -43,33 +43,58 @@ const PLAN_FEATURES = [
 
 export default function MedConnectLanding() {
   return (
-    <main className="w-full bg-slate-50 font-sans selection:bg-cyan-500/20">
-      
-      {/* SEÇÃO 1: Hero */}
-      <section id="sobre" className="scroll-mt-28 pt-8 pb-20 lg:pt-16 lg:pb-32 px-6 lg:px-8 w-full max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
-        <div className="flex-1 space-y-8 text-center lg:text-left">
-          <h1 className="text-4xl lg:text-6xl font-black text-slate-800 tracking-tight leading-[1.1]">
-            A plataforma B2B definitiva para suas <span className="text-transparent bg-clip-text bg-sky-700">negociações médicas.</span>
-          </h1>
-          <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-            Nascemos com um propósito claro: evitar o desperdício na saúde. O MedConnect é a ponte que conecta clínicas e profissionais que possuem insumos e materiais parados àqueles que realmente precisam, de forma rápida, segura e inteligente.
-          </p>
-        </div>
+    <main className="w-full min-h-screen">
 
-        {/* Elemento Visual Hero */}
-        <div className="flex-1 w-full max-w-md lg:max-w-none relative">
-          <div className="aspect-square rounded-3xl bg-linear-to-br from-sky-800 to-sky-900 p-8 shadow-2xl relative overflow-hidden flex flex-col justify-center items-center">
-            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-white/5 blur-2xl rounded-full" />
-            <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-black/20 blur-2xl rounded-full" />
-            <p className="relative z-10 text-white text-lg font-semibold border-2 border-dashed border-white/30 p-8 rounded-xl">
-              Sua Imagem Hero Aqui
+     {/* SEÇÃO 1: Hero */}
+      <section
+        id="sobre"
+        className="relative w-full min-h-screen flex items-center px-6 lg:px-8 bg-linear-to-b from-zinc-50 via-zinc-50 via-50% to-zinc-100 lg:bg-linear-to-r overflow-hidden"
+      >
+        {/* O container do conteúdo tem z-10, ficando ACIMA da nossa sombra de transição */}
+        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center z-10 py-12 lg:py-24">
+
+          {/* Lado Esquerdo: Conteúdo de Texto */}
+          <div className="space-y-8 text-center lg:text-left">
+            <h1 className="text-4xl lg:text-6xl font-black text-slate-800 tracking-tight leading-[1.1]">
+              A plataforma B2B definitiva para suas <span className="text-sky-700">negociações médicas.</span>
+            </h1>
+            <p className="text-lg text-slate-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              Nascemos com um propósito claro: evitar o desperdício na saúde. O MedConnect é a ponte que conecta clínicas e profissionais que possuem insumos e materiais parados àqueles que realmente precisam, de forma rápida, segura e inteligente.
             </p>
           </div>
+
+          {/* Lado Direito (Mobile): Visível apenas no celular/tablet para manter o fluxo */}
+          <div className="w-full h-72 md:h-96 lg:hidden relative rounded-2xl overflow-hidden">
+            <img 
+              src="../stock.jpg" 
+              alt="Stock medical photo" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+
         </div>
+
+        {/* Lado Direito (Desktop): Ocupa toda a metade direita (z-0) */}
+        <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-1/2 h-full z-0">
+          {/* Imagem com fade na esquerda */}
+          <img 
+            src="../stock.jpg" 
+            alt="Stock medical photo" 
+            className="w-full h-full object-cover mask-[linear-gradient(to_right,transparent,black_40%,black_100%)]" 
+          />
+          {/* Sombra vindo da direita para a esquerda */}
+          <div className="absolute inset-0 bg-linear-to-l from-black/50 via-black/10 to-transparent" />
+        </div>
+
+        {/* CAMADA DE TRANSIÇÃO (Efeito máscara no fundo/imagem)
+          Fica no z-5: Acima da imagem (z-0), mas abaixo do texto (z-10).
+          Isso faz a imagem e o fundo sumirem suavemente em direção ao branco da Seção 2.
+        */}
+        <div className="absolute bottom-0 left-0 right-0 h-90 bg-linear-to-t from-zinc-50 to-transparent z-5" />
       </section>
 
       {/* SEÇÃO 2: Como Funciona */}
-      <section id="como-funciona" className="scroll-mt-24 py-24 bg-white border-y border-slate-200/60">
+      <section id="como-funciona" className="scroll-mt-24 py-24 mt-24 bg-white border-y border-slate-200/60">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tight mb-4">
@@ -82,7 +107,7 @@ export default function MedConnectLanding() {
 
           <div className="grid md:grid-cols-3 gap-8 relative">
             <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-linear-to-r from-slate-100 via-slate-200 to-slate-100" />
-            
+
             {/* Renderização Dinâmica dos Passos */}
             {HOW_IT_WORKS_STEPS.map(({ id, title, description, Icon }) => (
               <div key={id} className="relative flex flex-col items-center text-center group">
@@ -141,7 +166,7 @@ export default function MedConnectLanding() {
                   </Button>
                 </Link>
                 <p className="text-xs text-slate-400 text-center sm:text-left">
-                  Cancele quando quiser.<br/>Pagamento seguro.
+                  Cancele quando quiser.<br />Pagamento seguro.
                 </p>
               </div>
             </CardContent>
