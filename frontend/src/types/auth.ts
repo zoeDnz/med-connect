@@ -15,6 +15,21 @@ export interface AuthLoginResponse {
   refresh: string
 }
 
+export interface AuthRegisterRequest {
+  nm_pessoaj: string
+  email_pj: string
+  senha_pj: string
+  resp_tec: string
+  nr_cnpj: string
+  razao_social: string
+}
+
+export interface AuthRegisterResponse {
+  message: string
+  id: number
+  status: string
+}
+
 export interface TokenObtainPairRequest {
   username: string
   password: string

@@ -27,3 +27,24 @@ export const authSchema = z.object({
   password: z.string()
     .min(6, "A senha deve conter pelo menos 6 caractéres")
 })
+
+export const registerSchema = z.object({
+  nm_pessoaj: z.string()
+    .min(3, "Nome é obrigatório"),
+
+  razao_social: z.string()
+    .min(3, "Razão social é obrigatória"),
+
+  nr_cnpj: z.string()
+    .min(1, "CNPJ é obrigatório")
+    .refine(isValidCNPJ, "O CNPJ é inválido"),
+
+  email_pj: z.string()
+    .email("E-mail inválido"),
+
+  resp_tec: z.string()
+    .min(3, "Responsável técnico é obrigatório"),
+
+  senha_pj: z.string()
+    .min(6, "A senha deve conter pelo menos 6 caracteres")
+})

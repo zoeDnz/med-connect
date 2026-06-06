@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useMemo } from "react"
 import {
   CheckCircle2,
+  Megaphone,
   Handshake,
   History,
   Package,
@@ -14,16 +15,25 @@ import servicesGetMeusAnuncios from "@/server/(GET)-meus-anuncios"
 import servicesGetMeusMaaterials from "@/server/(GET)-meus-materiais"
 import { Anuncio, MatMed } from "@/types"
 import servicesGetMinhasCompras from "@/server/(GET)-minhas-compras"
+import servicesUpdateAnuncio from "@/server/(PUT)-anuncio"
 
 // Abas baseadas nos STATUS_CHOICES do model Django
 const TABS = [
   {
     id: "ativos",
-    label: "Ativos & Em Negociação",
+    label: "Ativos",
+    icon: Megaphone,
+    // Como a API 'meus-anuncios' já traz SOMENTE os anúncios do usuário logado, basta olhar o status
+    filter: (anuncio: Anuncio, cdPessoa: string | null) =>
+      anuncio.ie_status === "A",
+  },
+  {
+    id: "negociacao",
+    label: "Em Negociação",
     icon: Handshake,
     // Como a API 'meus-anuncios' já traz SOMENTE os anúncios do usuário logado, basta olhar o status
     filter: (anuncio: Anuncio, cdPessoa: string | null) =>
-      anuncio.ie_status === "A" || anuncio.ie_status === "N",
+      anuncio.ie_status === "N",
   },
   {
     id: "finalizados",

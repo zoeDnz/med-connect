@@ -51,7 +51,7 @@ export default function PerfilPage() {
           }`}
         >
           <Package size={16} className="inline mr-2" />
-          Meus Anúncios
+          Histórico de operações
         </button>
 
         <button

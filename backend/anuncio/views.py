@@ -28,6 +28,18 @@ def minhas_compras(request):
     serializer = AnuncioSerializer(anuncios, many=True)
     return Response(serializer.data)
 
+# View que retorna somente os anúncios onde o usuário é o anunciante e o status é 'N' (em andamento)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def minhas_propostas(request):
+    anuncios = Anuncio.objects.filter(
+        cd_pessoa_anunciante=request.user,
+        ie_status='N'
+    )
+
+    serializer = AnuncioSerializer(anuncios, many=True)
+    return Response(serializer.data)
+
 class AnuncioCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = AnuncioSerializer

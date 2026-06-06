@@ -18,6 +18,8 @@ import { Spinner } from "@/components/ui/spinner"
 import { useRouter } from "next/navigation"
 import servicesAuth from "@/server/(POST)-auth"
 import { ArrowRight } from "lucide-react"
+import { registerSchema } from "../schema"
+import servicesRegister from "@/server/(POST)-register"
 
 export default function Form(): JSX.Element {
   const router = useRouter()
@@ -33,6 +35,18 @@ export default function Form(): JSX.Element {
     },
   })
 
+  const registerForm = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      nm_pessoaj: "",
+      razao_social: "",
+      nr_cnpj: "",
+      email_pj: "",
+      resp_tec: "",
+      senha_pj: ""
+    }
+  })
+
   const onSubmit = (data: z.infer<typeof authSchema>): void => {
     startSubmit(async () => {
       const response = await servicesAuth(data)
@@ -43,6 +57,25 @@ export default function Form(): JSX.Element {
       localStorage.setItem("cnpj", response.cnpj)
       localStorage.setItem("userId", String(response.id))
       router.push("/vitrine")
+    })
+  }
+
+  const onRegister = (data: z.infer<typeof registerSchema>): void => {
+    startSubmit(async () => {
+      const response = await servicesRegister(data)
+
+      if ("isError" in response) {
+        alert(response.message)
+        return
+      }
+
+      alert(
+        "Solicitação enviada com sucesso! Aguarde aprovação."
+      )
+
+      registerForm.reset()
+
+      setIsRightPanelActive(false)
     })
   }
 
@@ -69,23 +102,45 @@ export default function Form(): JSX.Element {
             <h1 className="font-bold text-3xl mb-4 text-sky-800">Criar Conta</h1>
             <p className="text-sm text-gray-500 mb-6">Insira seus dados para começar</p>
             
-            <form className="w-full flex flex-col gap-3">
-              <Input placeholder="Nome Completo" className="bg-gray-100 border-none px-4 py-3 h-12" />
-              <Input placeholder="CNPJ" className="bg-gray-100 border-none px-4 py-3 h-12" />
-              
-              <Input 
-                type="password" 
-                placeholder="Senha" 
-                {...form.register("password")} 
-                className="bg-gray-100 border-none px-4 py-3 h-12" 
+            <form
+              onSubmit={registerForm.handleSubmit(onRegister)}
+              className="w-full flex flex-col gap-3"
+            >            
+              <Input
+                placeholder="Nome da Empresa" className="bg-gray-100 border-none px-4 py-3 h-9"
+                {...registerForm.register("nm_pessoaj")}
               />
-              
-              
-              
-              
 
-              <Button type="button" className="rounded-full bg-sky-800 hover:bg-sky-900 text-white font-bold text-xs uppercase tracking-wider py-3.5 px-10 mt-2 h-12 transition-transform active:scale-95">
-                Cadastrar
+              <Input
+                placeholder="Razão Social" className="bg-gray-100 border-none px-4 py-3 h-9"
+                {...registerForm.register("razao_social")}
+              />
+
+              <Input
+                placeholder="CNPJ" className="bg-gray-100 border-none px-4 py-3 h-9"
+                {...registerForm.register("nr_cnpj")}
+              />
+
+              <Input
+                placeholder="E-mail" className="bg-gray-100 border-none px-4 py-3 h-9"
+                {...registerForm.register("email_pj")}
+              />
+
+              <Input
+                placeholder="Responsável Técnico" className="bg-gray-100 border-none px-4 py-3 h-9"
+                {...registerForm.register("resp_tec")}
+              />
+
+              <Input
+                type="password"
+                placeholder="Senha" className="bg-gray-100 border-none px-4 py-3 h-10"
+                {...registerForm.register("senha_pj")}
+              />
+              <Button
+                type="submit"
+                className="rounded-full bg-sky-800 hover:bg-sky-900 text-white font-bold text-xs uppercase tracking-wider py-3.5 px-10 mt-2 h-12 transition-transform active:scale-95"
+              >
+                Solicitar Credenciamento
               </Button>
             </form>
 
@@ -228,14 +283,14 @@ export default function Form(): JSX.Element {
             >
               <h1 className="font-bold text-4xl mb-6">Olá, Parceiro!</h1>
               <p className="text-sm font-light leading-relaxed tracking-wide mb-8">
-                Ainda não faz parte da nossa rede? Insira seus dados e comece sua jornada na área da saúde!
+                Ainda não faz parte da nossa rede? Solicite seu credenciamento agora mesmo!
               </p>
               <Button 
                 onClick={() => setIsRightPanelActive(true)}
                 variant="outline"
                 className="rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-sky-800 font-bold text-xs uppercase tracking-wider py-3.5 px-12 h-12 transition-transform active:scale-95"
               >
-                Cadastrar
+                Solicitar Credenciamento
               </Button>
             </div>
 
