@@ -9,10 +9,6 @@ interface LogoProps extends HTMLAttributes<HTMLDivElement> {
 export default function Logo({ size = 24, isDark = false, ...props }: LogoProps): JSX.Element {
   return (
     <div
-      className={cn(
-        "font-bold italic",
-        isDark ? "text-white" : "text-cyan-800"
-      )}
       style={{ fontSize: size }}
       {...props}
     >

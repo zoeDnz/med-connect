@@ -27,7 +27,7 @@ import {
 
 // 1. Array de links para manter o código limpo (DRY)
 const NAV_LINKS = [
-  { name: "Vitrine", href: "/vitrine", icon: Store },
+  { name: "Catálogo", href: "/catalogo", icon: Store },
   { name: "Cadastro", href: "/cadastrar-insumos", icon: FileText },
   { name: "Publicar Anúncio", href: "/anunciar", icon: SquarePlus },
   { name: "Caixa de propostas", href: "/caixa-de-propostas", icon: Inbox },
@@ -77,7 +77,7 @@ export default function Layout({ children }: LayoutProps) {
         {/* LOGO */}
         <div className="flex items-center">
             <img src="../med-icon.svg" alt="MedConnect Logo" className="w-8 h-8 mr-2 ml-0 filter invert" />
-          <Link href="/vitrine" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
+          <Link href="/catalogo" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
             MedConnect
           </Link>
         </div>
@@ -144,14 +144,14 @@ export default function Layout({ children }: LayoutProps) {
               <DropdownMenuSeparator className="border-t border-zinc-100 dark:border-zinc-800 my-1" />
 
               <DropdownMenuItem
-                className="flex items-center gap-2 px-4 py-2.5 mt-1.5 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 text-left transition-colors cursor-pointer focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/30"
+                className="flex items-center gap-2 px-4 py-2.5 mt-1.5 text-sm font-bold text-red-600  text-left transition-colors cursor-pointer focus:text-slate-800 focus:bg-red-100"
                 onClick={() => {
                   localStorage.removeItem("token")
                   localStorage.removeItem("cnpj")
                   router.push("/auth")
                 }}
               >
-                <LogOut size={16} />
+                <LogOut size={16} className="text-red-600 " />
                 Sair do Sistema
               </DropdownMenuItem>
             </DropdownMenuContent>

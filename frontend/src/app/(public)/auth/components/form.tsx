@@ -56,7 +56,7 @@ export default function Form(): JSX.Element {
       localStorage.setItem("token", response.access)
       localStorage.setItem("cnpj", response.cnpj)
       localStorage.setItem("userId", String(response.id))
-      router.push("/vitrine")
+      router.push("/catalogo")
     })
   }
 
@@ -80,18 +80,11 @@ export default function Form(): JSX.Element {
   }
 
   return (
-    // AQUÍ ESTÁ A MUDANÇA: 
-    // 1. Alterado de `items-center` para `items-start` (joga tudo pro topo)
-    // 2. Adicionado `pt-16 md:pt-24` para dar uma margem do topo (ajuste esse número como preferir)
-    <div className="min-h-screen w-full flex items-start justify-center pt-16 md:pt-24 bg-gray-100 pb-0 font-sans text-gray-900">
-      
-      {/* Contêiner Principal da Animação */}
-      {/* Ajustei o tamanho máximo/mínimo da caixa branca para evitar sobras dentro do próprio card */}
+      <div className="min-h-screen w-full flex items-start justify-center pt-16 md:pt-24 bg-gray-100 pb-0 font-sans text-gray-900">
+      {/* container principal da animacao show de bola de um lado pro outro */}
       <div className="relative overflow-hidden w-full max-w-212.5 min-h-120 bg-white rounded-2xl shadow-2xl">
-        
-        {/* ======================= */}
-        {/* PAINEL: CADASTRAR       */}
-        {/* ======================= */}
+
+        {/* painel para cadastrar nova pessoa juridica */}
         <div 
           className={`absolute top-0 left-0 h-full w-full md:w-1/2 transition-all duration-700 ease-in-out 
           ${isRightPanelActive 
@@ -153,9 +146,7 @@ export default function Form(): JSX.Element {
           </div>
         </div>
 
-        {/* ======================= */}
-        {/* PAINEL: ENTRAR (LOGIN)  */}
-        {/* ======================= */}
+        {/* painel para login de pessoa juridica ja existente e aprovada pelo admin, pendente nao consegue entrar */}
         <div 
           className={`absolute top-0 left-0 h-full w-full md:w-1/2 transition-all duration-700 ease-in-out z-20 
           ${isRightPanelActive 
@@ -246,9 +237,7 @@ export default function Form(): JSX.Element {
           </div>
         </div>
 
-        {/* ======================= */}
-        {/* OVERLAY (COBERTURA DESLIZANTE) */}
-        {/* ======================= */}
+        {/* overlay para mudar de login para cadastro com animacaozinha */}
         <div 
           className={`hidden md:block absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-700 ease-in-out z-100 
           ${isRightPanelActive ? '-translate-x-full' : 'translate-x-0'}`}
@@ -258,7 +247,7 @@ export default function Form(): JSX.Element {
             ${isRightPanelActive ? 'translate-x-1/2' : 'translate-x-0'}`}
           >
             
-            {/* Conteúdo Esquerdo do Overlay */}
+            {/* texto do lado esquerdo do overlay*/}
             <div 
               className={`absolute top-0 flex flex-col items-center justify-center px-12 text-center h-full w-1/2 transition-transform duration-700 ease-in-out 
               ${isRightPanelActive ? 'translate-x-0' : 'translate-x-[-20%]'}`}
@@ -276,7 +265,7 @@ export default function Form(): JSX.Element {
               </Button>
             </div>
 
-            {/* Conteúdo Direito do Overlay */}
+            {/* texto do lado direito do overlay */}
             <div 
               className={`absolute top-0 right-0 flex flex-col items-center justify-center px-12 text-center h-full w-1/2 transition-transform duration-700 ease-in-out 
               ${isRightPanelActive ? 'translate-x-[20%]' : 'translate-x-0'}`}

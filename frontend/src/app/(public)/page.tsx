@@ -22,7 +22,7 @@ const HOW_IT_WORKS_STEPS = [
   {
     id: 2,
     title: "Encontre a Demanda",
-    description: "Nossa vitrine inteligente conecta seus produtos a clínicas e profissionais que estão buscando exatamente o que você tem.",
+    description: "Nosso catálogo inteligente conecta seus produtos a clínicas e profissionais que estão buscando exatamente o que você tem.",
     Icon: Search,
   },
   {
@@ -113,7 +113,7 @@ export default function MedConnectLanding() {
               <div key={id} className="relative flex flex-col items-center text-center group">
                 <div className="w-24 h-24 bg-slate-50 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-center mb-6 relative z-10 group-hover:-translate-y-2 transition-all duration-300">
                   <Icon className="w-10 h-10 text-sky-600" />
-                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-sky-700 text-white font-bold rounded-full flex items-center justify-center shadow-md border-2 border-white">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 bg-sky-700 text-zinc-50 font-bold rounded-full flex items-center justify-center shadow-md border-2 border-zinc-50">
                     {id}
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export default function MedConnectLanding() {
 
               <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-4">
                 <Link href="/auth" className="w-full sm:w-auto">
-                  <Button className="w-full sm:w-auto h-12 px-8 bg-sky-700 hover:bg-sky-800 text-white font-bold rounded-xl text-md transition-all shadow-md">
+                  <Button className="w-full sm:w-auto h-12 px-8 bg-sky-700 hover:bg-sky-800 text-zinc-50 font-bold rounded-xl text-md transition-all shadow-md">
                     Criar conta e Assinar
                   </Button>
                 </Link>
@@ -175,25 +175,25 @@ export default function MedConnectLanding() {
       </section>
 
       {/* FOOTER */}
-      <footer className="w-full bg-sky-950 text-zinc-300 py-10 px-6 md:px-10 border-t border-white/10">
+      <footer className="w-full bg-sky-950 text-zinc-300 py-10 px-6 md:px-10 border-t border-zinc-50/10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           <div className="flex flex-col gap-2">
-            <h2 className="font-extrabold text-xl text-white tracking-wider">MedConnect</h2>
+            <h2 className="font-extrabold text-xl text-zinc-50 tracking-wider">MedConnect</h2>
             <p className="text-zinc-400">Conectando pacientes e especialistas com tecnologia e segurança.</p>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-white mb-1">Navegação</h3>
-            <Link href="/#sobre" className="hover:text-white transition-colors">Sobre Nós</Link>
-            <Link href="/#como-funciona" className="hover:text-white transition-colors">Como Funciona</Link>
-            <Link href="/#planos" className="hover:text-white transition-colors">Planos</Link>
+            <h3 className="font-bold text-zinc-50 mb-1">Navegação</h3>
+            <Link href="/#sobre" className="hover:text-zinc-50 transition-colors">Sobre Nós</Link>
+            <Link href="/#como-funciona" className="hover:text-zinc-50 transition-colors">Como Funciona</Link>
+            <Link href="/#planos" className="hover:text-zinc-50 transition-colors">Planos</Link>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-white mb-1">Legal</h3>
-            <Link href="/termos" className="hover:text-white transition-colors">Termos de Uso</Link>
-            <Link href="/privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link>
+            <h3 className="font-bold text-zinc-50 mb-1">Legal</h3>
+            <Link href="/termos" className="hover:text-zinc-50 transition-colors">Termos de Uso</Link>
+            <Link href="/privacidade" className="hover:text-zinc-50 transition-colors">Política de Privacidade</Link>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-white/10 text-center text-xs text-zinc-500">
+        <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-zinc-50/10 text-center text-xs text-zinc-500">
           © {new Date().getFullYear()} MedConnect. Todos os direitos reservados.
         </div>
       </footer>
