@@ -15,7 +15,6 @@ import servicesGetMeusAnuncios from "@/server/(GET)-meus-anuncios"
 import servicesGetMeusMaaterials from "@/server/(GET)-meus-materiais"
 import { Anuncio, MatMed } from "@/types"
 import servicesGetMinhasCompras from "@/server/(GET)-minhas-compras"
-import servicesUpdateAnuncio from "@/server/(PUT)-anuncio"
 
 // Abas baseadas nos STATUS_CHOICES do model Django
 const TABS = [

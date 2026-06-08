@@ -4,7 +4,6 @@ import React, { useEffect, useState, useMemo } from "react"
 import {
   CheckCircle2,
   Megaphone,
-  Handshake,
   History,
   Package,
   Calendar,
@@ -15,12 +14,6 @@ import servicesGetMeusAnuncios from "@/server/(GET)-meus-anuncios"
 import servicesGetMeusMaaterials from "@/server/(GET)-meus-materiais"
 import { Anuncio, MatMed } from "@/types"
 import servicesGetMinhasCompras from "@/server/(GET)-minhas-compras"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Search, ExternalLink, PackageX, ShoppingCart } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronRight } from "lucide-react"
 
 // Abas baseadas nos STATUS_CHOICES do model Django
 const TABS = [

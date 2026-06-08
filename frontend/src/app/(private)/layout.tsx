@@ -10,8 +10,8 @@ import {
   Store, 
   FileText, 
   SquarePlus,
-  History,
-  ChevronDown 
+  ChevronDown, 
+  Inbox
 } from "lucide-react"
 
 import { ModeToggle } from "@/components/ui/toggle-theme"
@@ -30,7 +30,7 @@ const NAV_LINKS = [
   { name: "Vitrine", href: "/vitrine", icon: Store },
   { name: "Cadastro", href: "/cadastrar-insumos", icon: FileText },
   { name: "Publicar Anúncio", href: "/anunciar", icon: SquarePlus },
-  { name: "Histórico", href: "/historico", icon: History },
+  { name: "Caixa de propostas", href: "/caixa-de-propostas", icon: Inbox },
 ]
 
 interface LayoutProps {

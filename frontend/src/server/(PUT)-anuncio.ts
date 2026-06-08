@@ -5,7 +5,7 @@ import { buildUrl, getAuthHeaders, handleResponse, ServiceResult } from "@/serve
 
 export default async function servicesUpdateAnuncio(nrAnuncio: number, payload: UpdateAnuncioForm): Promise<ServiceResult<Anuncio>> {
   const response = await fetch(buildUrl(`/api/medconnect/anuncio/${nrAnuncio}/`), {
-    method: "PUT",
+    method: "PATCH", //Precisa ser patch pois ao alterar o status aceitar/recusar proposta, não será enviado o restante dos dados do anúncio
     headers: getAuthHeaders(),
     body: JSON.stringify(payload),
   })

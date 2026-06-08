@@ -8,7 +8,7 @@ import servicesGetMinhaPessoaJuridica from "@/server/(GET)-minha-pessoa-juridica
 import { PessoaJuridica } from "@/types"
 
 import PerfilHeader from "@/components/perfil/PerfilHeader"
-import MeusAnuncios from "@/components/perfil/MeusAnuncios"
+import MeusAnuncios from "@/components/perfil/HistoricoDeOperacoes"
 import MeusMateriais from "@/components/perfil/MeusMateriais"
 
 export default function PerfilPage() {

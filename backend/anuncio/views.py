@@ -33,9 +33,10 @@ def minhas_compras(request):
 @permission_classes([IsAuthenticated])
 def minhas_propostas(request):
     anuncios = Anuncio.objects.filter(
-        cd_pessoa_anunciante=request.user,
-        ie_status='N'
-    )
+    cd_pessoa_compradora=request.user
+        ).exclude(
+            ie_status='F'
+        ).order_by('-data_anuncio')
 
     serializer = AnuncioSerializer(anuncios, many=True)
     return Response(serializer.data)
