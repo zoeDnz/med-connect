@@ -1,125 +1,54 @@
 "use client"
 
-import React, { ReactNode } from "react"
+import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import {
-  Info,
-  HelpCircle,
-  CreditCard
-} from "lucide-react"
+import { Info, HelpCircle, CreditCard } from "lucide-react"
 
-import { ModeToggle } from "@/components/ui/toggle-theme"
+const NAV_LINKS = [
+  { name: "Sobre Nós", href: "/#sobre", icon: Info },
+  { name: "Como Funciona", href: "/#como-funciona", icon: HelpCircle },
+  { name: "Planos", href: "/#planos", icon: CreditCard },
+]
 
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
-
-interface PublicLayoutProps {
-  children: ReactNode
-}
-
-export default function PublicLayout({ children }: PublicLayoutProps) {
+export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const isAuthPage = pathname === "/auth"
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center bg-zinc-50 text-zinc-900 font-sans antialiased selection:bg-cyan-500/20 dark:bg-black dark:text-zinc-100 scroll-smooth">
-
+    <div className="w-full min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100 scroll-smooth">
       {/* NAVBAR */}
-      <nav className="w-full h-16 flex items-center justify-between bg-sky-950 shadow-md px-6 md:px-10 z-50 sticky top-0 dark:bg-zinc-950">
-
+      <nav className="w-full h-16 flex items-center justify-between bg-sky-950 px-6 md:px-10 sticky top-0 z-50 border-b border-white/10">
+        
         {/* LOGO */}
-        <div className="flex items-center">
-          <img src="../med-icon.svg" alt="MedConnect Logo" className="w-8 h-8 mr-2 ml-0 filter invert" />
-          <Link
-            href="/"
-            className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity"
-          >
-            MedConnect
-          </Link>
-        </div>
+        <Link href="/" className="font-extrabold text-xl text-white tracking-wider">
+           MedConnect
+        </Link>
 
-        {/* MENU */}
-        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center text-sm font-semibold text-zinc-300">
-
-          <NavigationMenu>
-            <NavigationMenuList className="flex gap-2">
-
-              {/* SOBRE */}
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/#sobre"
-                  className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
-
-
-                >
-                  <Info size={16} className="text-zinc-400" />
-                  Sobre Nós
-
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              {/* COMO FUNCIONA */}
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/#como-funciona"
-                  className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
-                >
-                  <HelpCircle size={16} className="text-zinc-400" />
-                  Como Funciona
-
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              {/* PLANOS */}
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/#planos"
-                  className="flex items-center gap-1.5 py-2 pr-3 pl-2 rounded-full text-zinc-300 hover:text-white hover:bg-white/10 transition-colors font-semibold text-sm"
-                >
-                  <CreditCard size={16} className="text-zinc-400" />
-                  Planos
-
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-            </NavigationMenuList>
-          </NavigationMenu>
-
+        {/* MENU RÁPIDO */}
+        <div className="hidden md:flex items-center gap-1">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-zinc-300 hover:text-white hover:bg-white/10 rounded-full transition-all"
+            >
+              <link.icon size={16} />
+              {link.name}
+            </Link>
+          ))}
         </div>
 
         {/* AÇÕES */}
-        <div className="flex items-center gap-4">
-          {!isAuthPage && (
-            <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="/auth"
-                className="text-sm font-semibold text-zinc-300 hover:text-white px-3 py-1.5 rounded-full hover:bg-white/10"
-              >
-                Entrar
-              </Link>
-
-              <Link
-                href="/auth"
-                className="bg-sky-800 hover:bg-sky-900 text-white font-bold text-sm px-4 py-2.5 rounded-full transition-all"
-              >
-                Cadastre-se
-              </Link>
-            </div>
-          )}
-
-        </div>
+        {!isAuthPage && (
+          <div className="flex gap-3">
+             <Link href="/auth" className="text-sm font-semibold text-zinc-300 hover:text-white px-3 py-2.5 rounded-full hover:bg-white/10">Entrar</Link>
+             <Link href="/auth" className="bg-sky-800 hover:bg-sky-900 text-white font-bold text-sm px-4 py-2.5 rounded-full transition-all">Cadastre-se</Link>
+          </div>
+        )}
       </nav>
 
-      {/* CONTEÚDO */}
-      <main className="w-full flex-1 flex flex-col items-center">
-        {children}
-      </main>
-
+      <main>{children}</main>
     </div>
   )
 }
