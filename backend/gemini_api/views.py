@@ -59,7 +59,7 @@ class GerarDescricaoAnuncioView(APIView):
         
         Logística:
         - Quantidade Disponível: {qtd_solicitada} {lote.unidade_med}
-        - Hospital Ofertante: {hospital_vendedor.nm_pessoaj}
+        - Hospital Ofertante: {hospital_anunciante.nm_pessoaj}
 
         Diretrizes da resposta:
         - Tom estritamente formal e profissional (adequado para o setor da saúde).

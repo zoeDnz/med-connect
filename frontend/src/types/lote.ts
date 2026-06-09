@@ -1,21 +1,22 @@
 export interface Lote {
   nr_lote: number
-  /** ISO 8601 datetime string */
+  ds_lote: string
+
   dt_fabricacao: string
-  /** Date string (YYYY-MM-DD) */
   dt_validade: string
+
   qtd_lote: number
   unidade_med: string
-  /** FK → Fabricante.cd_fabricante */
+
+  ie_status: string
+
   fabricante: number
-  /** FK → MatMed.cd_mat */
   cd_material: number
-  /** FK → PessoaJuridica.cd_pessoaj */
   cd_pessoaj: number
 }
 
 export interface CreateLoteForm {
-  nr_lote: number
+  ds_lote: string | number
   dt_fabricacao: string
   dt_validade: string
   qtd_lote: number

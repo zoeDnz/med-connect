@@ -65,7 +65,6 @@ export default function CadastroPage() {
   })
 
   const [loteForm, setLoteForm] = useState<CreateLoteForm>({
-    nr_lote: 0,
     dt_fabricacao: "",
     dt_validade: "",
     qtd_lote: 0,
@@ -134,7 +133,6 @@ export default function CadastroPage() {
     }
     setLoteForm((prev) => ({
       ...prev,
-      nr_lote: 0,
       dt_fabricacao: "",
       dt_validade: "",
       qtd_lote: 0,

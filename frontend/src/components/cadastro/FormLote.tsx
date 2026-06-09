@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react"
 import {
   AlertCircle,
   Calendar,
-  Building2,
   Hash,
   Layers,
 } from "lucide-react"
@@ -36,7 +35,7 @@ export default function FormLote() {
   const [materiais, setMateriais] = useState<MatMed[]>([])
 
   const [loteForm, setLoteForm] = useState<CreateLoteForm>({
-    nr_lote: 0,
+    ds_lote: "",
     dt_fabricacao: "",
     dt_validade: "",
     qtd_lote: 0,
@@ -47,7 +46,32 @@ export default function FormLote() {
   })
 
   useEffect(() => {
-    const userId = Number(localStorage.getItem("userId") || 0)
+    async function initialize() {
+      const [responseFabricantes, responseMateriais] =
+        await Promise.all([
+          servicesGetFabricantes(),
+          servicesGetMatMed(),
+        ])
+
+      if (
+        responseFabricantes &&
+        !("isError" in responseFabricantes)
+      ) {
+        setFabricantes(responseFabricantes)
+      }
+
+      if (
+        responseMateriais &&
+        !("isError" in responseMateriais)
+      ) {
+        setMateriais(responseMateriais)
+      }
+    }
+
+    initialize()
+
+    const userId =
+      Number(localStorage.getItem("userId") || 0)
 
     setLoteForm((prev) => ({
       ...prev,
@@ -70,7 +94,7 @@ export default function FormLote() {
 
     setLoteForm((prev) => ({
       ...prev,
-      nr_lote: 0,
+      ds_lote: "",
       dt_fabricacao: "",
       dt_validade: "",
       qtd_lote: 0,
@@ -129,15 +153,14 @@ export default function FormLote() {
         </div>
 
         <InputField
-          label="Número do Lote"
+          label="Lote"
           icon={Hash}
-          type="number"
-          placeholder="Ex: 1001"
-          value={loteForm.nr_lote || ""}
+          placeholder="Ex: ABC123456"
+          value={loteForm.ds_lote}
           onChange={(event) =>
             setLoteForm((prev) => ({
               ...prev,
-              nr_lote: Number(event.target.value),
+              ds_lote: event.target.value,
             }))
           }
         />
@@ -239,18 +262,6 @@ export default function FormLote() {
           }
         />
 
-        <InputField
-          label="Código da Pessoa Jurídica"
-          icon={Building2}
-          type="number"
-          value={loteForm.cd_pessoaj || ""}
-          onChange={(event) =>
-            setLoteForm((prev) => ({
-              ...prev,
-              cd_pessoaj: Number(event.target.value),
-            }))
-          }
-        />
       </div>
 
       <button className="w-full bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer">

@@ -9,7 +9,7 @@ class Lote(models.Model):
         ('I', 'Inativo'),
     ]
     
-    nr_lote = models.IntegerField(primary_key=True) 
+    nr_lote = models.AutoField(primary_key=True)
     ds_lote = models.CharField(max_length=20)    #esse é o lote do material
     dt_fabricacao = models.DateTimeField()
     dt_validade = models.DateField()

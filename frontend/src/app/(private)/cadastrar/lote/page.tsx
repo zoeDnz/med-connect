@@ -2,7 +2,7 @@
 
 import FormLote from "@/components/cadastro/FormLote"
 
-export default function CadastroLotePage() {
+export default function LotePage() {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <div className="mb-8">
@@ -11,11 +11,11 @@ export default function CadastroLotePage() {
         </h1>
 
         <p className="text-zinc-500 text-sm mt-1">
-          Registre entradas de novos lotes.
+          Registre novos lotes de materiais.
         </p>
       </div>
 
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 shadow-sm">
+      <div className="bg-white dark:bg-zinc-900 border rounded-2xl p-6 md:p-8 shadow-sm">
         <FormLote />
       </div>
     </div>
