@@ -44,9 +44,9 @@ export default function PerfilPage() {
       <div className="flex gap-2 mb-8 border-b border-zinc-200 dark:border-zinc-800">
         <button
           onClick={() => setAbaAtiva("anuncios")}
-          className={`px-4 py-3 text-sm font-semibold transition-colors border-b-2 ${
+          className={`hover:cursor-pointer px-4 py-3 text-sm font-semibold transition-colors border-b-2 ${
             abaAtiva === "anuncios"
-              ? "border-sky-600 text-sky-600"
+              ? "border-sky-800 text-sky-800"
               : "border-transparent text-zinc-500 hover:text-zinc-800"
           }`}
         >
@@ -56,9 +56,9 @@ export default function PerfilPage() {
 
         <button
           onClick={() => setAbaAtiva("materiais")}
-          className={`px-4 py-3 text-sm font-semibold transition-colors border-b-2 ${
+          className={`hover:cursor-pointer px-4 py-3 text-sm font-semibold transition-colors border-b-2 ${
             abaAtiva === "materiais"
-              ? "border-sky-600 text-sky-600"
+              ? "border-sky-800 text-sky-800"
               : "border-transparent text-zinc-500 hover:text-zinc-800"
           }`}
         >

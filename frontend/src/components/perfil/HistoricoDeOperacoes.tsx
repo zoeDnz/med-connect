@@ -139,9 +139,9 @@ export default function HistoricoPage() {
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 border outline-none focus:ring-2 focus:ring-sky-500/20 ${
+              className={`hover:cursor-pointer flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 border outline-none focus:ring-2 focus:ring-sky-500/20 ${
                 isActive
-                  ? "bg-sky-700 text-white border-sky-700 shadow-md shadow-sky-900/10"
+                  ? "bg-sky-800 text-zinc-50 border-sky-700 shadow-md shadow-sky-900/10"
                   : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800"
               }`}
             >

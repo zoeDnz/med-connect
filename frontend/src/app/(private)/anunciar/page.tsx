@@ -204,7 +204,7 @@ export default function PublicarAnuncioPage() {
     <div className="max-w-4xl mx-auto py-8 px-4">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-sky-800  flex items-center gap-2">
-          <Megaphone className="text-sky-800" /> Publicar Anúncio
+         Publicar Anúncio
         </h1>
         <p className="text-zinc-500 text-sm mt-1">
           Selecione um insumo do seu estoque e defina as condições de negociação.

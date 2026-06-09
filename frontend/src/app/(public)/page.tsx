@@ -10,6 +10,7 @@ import {
   Search,
   CheckCircle2
 } from "lucide-react"
+import Footer from "@/components/ui/Footer"
 
 // 1. DADOS EXTRAÍDOS (Facilita a manutenção e limpa o JSX)
 const HOW_IT_WORKS_STEPS = [
@@ -197,30 +198,7 @@ export default function MedConnectLanding() {
           </Card>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="w-full bg-sky-950 text-zinc-300 py-10 px-6 md:px-10 border-t border-zinc-50/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-          <div className="flex flex-col gap-2">
-            <h2 className="font-extrabold text-xl text-zinc-50 tracking-wider">MedConnect</h2>
-            <p className="text-zinc-400">Conectando pacientes e especialistas com tecnologia e segurança.</p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-zinc-50 mb-1">Navegação</h3>
-            <Link href="/#sobre" className="hover:text-zinc-50 transition-colors">Sobre Nós</Link>
-            <Link href="/#como-funciona" className="hover:text-zinc-50 transition-colors">Como Funciona</Link>
-            <Link href="/#planos" className="hover:text-zinc-50 transition-colors">Planos</Link>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-zinc-50 mb-1">Legal</h3>
-            <Link href="/termos" className="hover:text-zinc-50 transition-colors">Termos de Uso</Link>
-            <Link href="/privacidade" className="hover:text-zinc-50 transition-colors">Política de Privacidade</Link>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-zinc-50/10 text-center text-xs text-zinc-500">
-          © {new Date().getFullYear()} MedConnect. Todos os direitos reservados.
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }

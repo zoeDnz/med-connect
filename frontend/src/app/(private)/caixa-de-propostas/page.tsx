@@ -11,44 +11,43 @@ const TABS = [
 ]
 
 export default function CaixaDePropostasPage() {
-  // controla qual aba esta ativa com padrao em negociacao
   const [activeTab, setActiveTab] = useState<string>("negociacao")
 
   return (
     <div className="max-w-5xl mx-auto py-10 px-4 md:px-0 font-sans">
       
-      {/* cabecalho da pagina */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-sky-800">
+        <h1 className="text-2xl font-bold text-sky-800 dark:text-white flex items-center gap-2">
           Caixa de Propostas
         </h1>
-        <p className="text-zinc-700 mt-2">
+        <p className="text-zinc-500 text-sm mt-1">
           Acompanhe os pedidos recebidos em seus anúncios e as propostas enviadas para terceiros.
         </p>
       </div>
 
-      {/* navegacao pelas abas */}
-      <div className="flex flex-wrap items-center gap-3 mb-8 border-b border-zinc-200 pb-5">
+      {/* Container das Tabs no estilo do Cadastro */}
+      <div className="flex items-center gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl w-fit mb-8">
         {TABS.map(({ id, label, icon: Icon }) => {
           const isActive = activeTab === id
           return (
             <button
               key={id}
+              type="button"
               onClick={() => setActiveTab(id)}
-              className={`hover: cursor-pointer flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 border outline-none focus:ring-2 focus:ring-sky-500/20 ${
+              className={`hover:cursor-pointer flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
                 isActive
-                  ? "bg-sky-700 text-white border-sky-700 shadow-md shadow-sky-900/10"
-                  : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800"
+                  ? "bg-sky-800 text-zinc-50 shadow-sm"
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
               }`}
             >
-              <Icon size={16} className={isActive ? "text-sky-100" : "text-zinc-400" } />
+              <Icon size={16} />
               {label}
             </button>
           )
         })}
       </div>
 
-      {/* exibe componente correspondente a aba ativa */}
+      {/* Conteúdo das abas */}
       <div className="mt-6">
         {activeTab === "negociacao" && <NegociacaoTab />}
         {activeTab === "compras" && <PropostasTab />}

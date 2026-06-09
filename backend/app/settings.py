@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     
     'authentication',
     'statistics_api',
-    'gemini_api',
+   'gemini_api',
     
 ]
 
@@ -98,7 +98,7 @@ DATABASES = {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'logincnpj',
             'USER': 'postgres',
-            'PASSWORD': "12345",
+            'PASSWORD': "1234",
             'HOST': 'localhost',
             'PORT': '5432',
     }

@@ -109,8 +109,8 @@ export default function FormInsumo() {
       className="space-y-6"
       onSubmit={handleSubmit}
     >
-      <h2 className="text-lg font-bold flex items-center gap-2">
-        <Package className="text-cyan-600" />
+      <h2 className="text-lg font-bold flex items-center gap-2 text-sky-800">
+        <Package className="text-sky-800" />
         Cadastrar Insumo
       </h2>
 
