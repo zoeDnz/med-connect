@@ -125,6 +125,30 @@ export default function MedConnectLanding() {
         </div>
       </section>
 
+
+      {/* SEÇÃO DE VÍDEO */}
+      <section className="py-24 px-6 lg:px-8 bg-slate-50 border-b border-slate-200/60">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tight mb-4">
+            Conectando quem tem com quem precisa!
+          </h2>
+          <p className="text-lg text-slate-500 mb-10">
+            Veja como o MedConnect está conectando hospitais com tecnologia, propósito e responsabilidade.
+          </p>
+          <div className="rounded-2xl overflow-hidden shadow-2xl shadow-sky-950/10 border border-slate-200/60">
+            <video
+              controls
+              className="w-full aspect-video bg-black"
+              preload="metadata"
+            >
+              <source src="/MedConnect_VIDEO.mp4" type="video/mp4" />
+              Seu navegador não suporta a reprodução de vídeo.
+            </video>
+          </div>
+        </div>
+      </section>
+
+
       {/* SEÇÃO 3: Planos */}
       <section id="planos" className="scroll-mt-24 py-24 px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
