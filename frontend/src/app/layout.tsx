@@ -27,18 +27,14 @@ export default function RootLayout({
   return (
     <html
       lang="pt-br"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased  scroll-smooth` }
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased  scroll-smooth`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <body
+        className="min-h-full flex flex-col"
+        suppressHydrationWarning={true}
+      >
+        {children}
       </body>
     </html>
   );

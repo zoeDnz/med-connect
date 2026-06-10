@@ -21,6 +21,7 @@ import { ArrowRight } from "lucide-react"
 import { registerSchema } from "../schema"
 import servicesRegister from "@/server/(POST)-register"
 
+
 export default function Form(): JSX.Element {
   const router = useRouter()
   const [isSubmit, startSubmit] = useTransition()
@@ -82,7 +83,7 @@ export default function Form(): JSX.Element {
   return (
       <div className="min-h-screen w-full flex items-start justify-center pt-16 md:pt-24 bg-gray-100 pb-0 font-sans text-gray-900">
       {/* container principal da animacao show de bola de um lado pro outro */}
-      <div className="relative overflow-hidden w-full max-w-212.5 min-h-120 bg-white rounded-2xl shadow-2xl">
+      <div className="relative overflow-hidden w-full max-w-212.5 min-h-120 bg-white rounded-2xl shadow-2xl z-0">
 
         {/* painel para cadastrar nova pessoa juridica */}
         <div 
@@ -240,7 +241,7 @@ export default function Form(): JSX.Element {
         {/* overlay para mudar de login para cadastro com animacaozinha */}
         <div 
           className={`hidden md:block absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-700 ease-in-out z-100 
-          ${isRightPanelActive ? '-translate-x-full' : 'translate-x-0'}`}
+          ${isRightPanelActive ? '-translate-x-full' : 'translate-x-0 z-0' }`}
         >
           <div 
             className={`bg-linear-to-br from-sky-800 via-sky-700 to-sky-900 text-white relative -left-full h-full w-[200%] transition-transform duration-700 ease-in-out 

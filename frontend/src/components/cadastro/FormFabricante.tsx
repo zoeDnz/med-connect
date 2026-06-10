@@ -33,8 +33,8 @@ export default function FormFabricante() {
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
-      <h2 className="text-lg font-bold flex items-center gap-2">
-        <Factory className="text-cyan-600" />
+      <h2 className="text-lg font-bold flex items-center gap-2 text-sky-800">
+        <Factory className="text-sky-800" />
         Cadastrar Fabricante
       </h2>
 

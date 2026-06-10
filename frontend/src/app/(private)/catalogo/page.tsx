@@ -11,6 +11,7 @@ import { Anuncio, MatMed } from "@/types"
 import { useRouter } from "next/navigation"
 import { Pagination } from "@/components/ui/pagination"
 
+
 const ITEMS_PER_PAGE = 12;
 
 export default function Anuncios() {
@@ -95,7 +96,7 @@ export default function Anuncios() {
         {/* cabecalho e barra de pesquisa  */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4 bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200/60">
           <div className="space-y-0.5">
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Catálogo de Insumos</h1>
+            <h1 className="text-2xl font-extrabold text-sky-800 tracking-tight">Catálogo de Insumos</h1>
             <p className="text-xs font-medium text-slate-500">
               Encontre medicamentos e produtos hospitalares disponíveis para compra!
             </p>
@@ -137,7 +138,7 @@ export default function Anuncios() {
                   key={anuncio.nr_anuncio}
                   className="group flex flex-col bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 rounded-2xl overflow-hidden"
                 >
-                  <div className="h-1 w-full bg-cyan-600" />
+                  <div className="h-1 w-full bg-sky-800" />
 
                   <CardHeader className="p-5 pb-3 space-y-2">
                     <div className="flex items-center justify-between gap-2">
@@ -152,7 +153,7 @@ export default function Anuncios() {
                       </span>
                     </div>
 
-                    <CardTitle className="text-base font-bold text-slate-800 leading-snug line-clamp-2 min-h-11 group-hover:text-cyan-600 transition-colors duration-200">
+                    <CardTitle className="text-base font-bold text-slate-800 leading-snug line-clamp-2 min-h-11 group-hover:text-sky-700  transition-colors duration-200">
                       {nomeMaterial}
                     </CardTitle>
                   </CardHeader>
@@ -192,8 +193,13 @@ export default function Anuncios() {
 
                   <CardFooter className="p-5 pt-4">
                     <Button
+<<<<<<< HEAD
                       onClick={() => router.push(`/anunciar/${anuncio.nr_anuncio}`)}
                       className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-xl h-11 transition-colors duration-200 flex items-center justify-center gap-2 group/btn shadow-sm"
+=======
+                      onClick={() => router.push(`/anuncio/${anuncio.nr_anuncio}`)}
+                      className="w-full bg-sky-800 hover:bg-sky-900 text-white font-semibold rounded-xl h-11 transition-colors duration-200 flex items-center justify-center gap-2 group/btn shadow-sm"
+>>>>>>> 1488afb37affd0e03ae8dea62a372c2d139c5ea5
                     >
                       <ShoppingCart className="w-4 h-4" />
                       Ver Oferta
@@ -216,7 +222,7 @@ export default function Anuncios() {
                 <Button
                   variant="link"
                   onClick={() => { setSearch(""); setCurrentPage(1); }}
-                  className="mt-3 text-cyan-600 p-0 h-auto text-xs font-bold hover:text-cyan-700"
+                  className="mt-3 text-sky-600 p-0 h-auto text-xs font-bold hover:text-sky-700"
                 >
                   Limpar filtros de busca
                 </Button>

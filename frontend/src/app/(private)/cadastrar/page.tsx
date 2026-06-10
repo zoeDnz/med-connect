@@ -7,6 +7,7 @@ import FormInsumo from "@/components/cadastro/FormInsumo"
 import FormLote from "@/components/cadastro/FormLote"
 import FormFabricante from "@/components/cadastro/FormFabricante"
 
+
 type Tab = "insumo" | "lote" | "fabricante"
 
 export default function CadastroPage() {
@@ -15,7 +16,7 @@ export default function CadastroPage() {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">
+        <h1 className="text-2xl font-bold text-sky-800 dark:text-white">
           Cadastro de Insumos | Lotes | Fabricantes
         </h1>
 
@@ -25,13 +26,13 @@ export default function CadastroPage() {
         </p>
       </div>
 
-      <div className="flex items-center gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl w-fit mb-6">
+      <div className="flex items-center gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl w-fit mb-6 ">
         <button
           type="button"
           onClick={() => setActiveTab("insumo")}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
+          className={`hover:cursor-pointer flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
             activeTab === "insumo"
-              ? "bg-white dark:bg-zinc-700 text-sky-950 dark:text-white shadow-sm"
+              ? "bg-sky-800  text-zinc-50  shadow-sm"
               : "text-zinc-500"
           }`}
         >
@@ -42,10 +43,10 @@ export default function CadastroPage() {
         <button
           type="button"
           onClick={() => setActiveTab("lote")}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
+          className={`hover:cursor-pointer flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
             activeTab === "lote"
-              ? "bg-white dark:bg-zinc-700 text-sky-950 dark:text-white shadow-sm"
-              : "text-zinc-500"
+              ? "bg-sky-800 text-zinc-50  shadow-sm"
+              : "text-zinc-500 "
           }`}
         >
           <Layers size={16} />
@@ -55,9 +56,9 @@ export default function CadastroPage() {
         <button
           type="button"
           onClick={() => setActiveTab("fabricante")}
-          className={`flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
+          className={`hover:cursor-pointer flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
             activeTab === "fabricante"
-              ? "bg-white dark:bg-zinc-700 text-sky-950 dark:text-white shadow-sm"
+              ? "bg-sky-800 text-zinc-50  shadow-sm"
               : "text-zinc-500"
           }`}
         >
@@ -74,5 +75,6 @@ export default function CadastroPage() {
         {activeTab === "fabricante" && <FormFabricante />}
       </div>
     </div>
+    
   )
 }

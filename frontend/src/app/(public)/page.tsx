@@ -10,6 +10,7 @@ import {
   Search,
   CheckCircle2
 } from "lucide-react"
+import Footer from "@/components/ui/Footer"
 
 // 1. DADOS EXTRAÍDOS (Facilita a manutenção e limpa o JSX)
 const HOW_IT_WORKS_STEPS = [
@@ -125,6 +126,30 @@ export default function MedConnectLanding() {
         </div>
       </section>
 
+
+      {/* SEÇÃO DE VÍDEO */}
+      <section className="py-24 px-6 lg:px-8 bg-slate-50 border-b border-slate-200/60">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tight mb-4">
+            Conectando quem tem com quem precisa!
+          </h2>
+          <p className="text-lg text-slate-500 mb-10">
+            Veja como o MedConnect está conectando hospitais com tecnologia, propósito e responsabilidade.
+          </p>
+          <div className="rounded-2xl overflow-hidden shadow-2xl shadow-sky-950/10 border border-slate-200/60">
+            <video
+              controls
+              className="w-full aspect-video bg-black"
+              preload="metadata"
+            >
+              <source src="/MedConnect_VIDEO.mp4" type="video/mp4" />
+              Seu navegador não suporta a reprodução de vídeo.
+            </video>
+          </div>
+        </div>
+      </section>
+
+
       {/* SEÇÃO 3: Planos */}
       <section id="planos" className="scroll-mt-24 py-24 px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -173,30 +198,7 @@ export default function MedConnectLanding() {
           </Card>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="w-full bg-sky-950 text-zinc-300 py-10 px-6 md:px-10 border-t border-zinc-50/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-          <div className="flex flex-col gap-2">
-            <h2 className="font-extrabold text-xl text-zinc-50 tracking-wider">MedConnect</h2>
-            <p className="text-zinc-400">Conectando pacientes e especialistas com tecnologia e segurança.</p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-zinc-50 mb-1">Navegação</h3>
-            <Link href="/#sobre" className="hover:text-zinc-50 transition-colors">Sobre Nós</Link>
-            <Link href="/#como-funciona" className="hover:text-zinc-50 transition-colors">Como Funciona</Link>
-            <Link href="/#planos" className="hover:text-zinc-50 transition-colors">Planos</Link>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-zinc-50 mb-1">Legal</h3>
-            <Link href="/termos" className="hover:text-zinc-50 transition-colors">Termos de Uso</Link>
-            <Link href="/privacidade" className="hover:text-zinc-50 transition-colors">Política de Privacidade</Link>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-zinc-50/10 text-center text-xs text-zinc-500">
-          © {new Date().getFullYear()} MedConnect. Todos os direitos reservados.
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }

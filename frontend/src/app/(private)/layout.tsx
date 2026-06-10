@@ -11,9 +11,11 @@ import {
   FileText, 
   SquarePlus,
   ChevronDown, 
-  Inbox
+  Inbox,
+  Menu,
+  X
 } from "lucide-react"
-
+import Footer from "@/components/ui/Footer"
 import { ModeToggle } from "@/components/ui/toggle-theme"
 
 import {
@@ -25,10 +27,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-// 1. Array de links para manter o código limpo (DRY)
+// Array de links para manter o código limpo (DRY)
 const NAV_LINKS = [
   { name: "Catálogo", href: "/catalogo", icon: Store },
-  { name: "Cadastro", href: "/cadastrar/", icon: FileText },
+  { name: "Cadastro", href: "/cadastrar", icon: FileText },
   { name: "Publicar Anúncio", href: "/anunciar", icon: SquarePlus },
   { name: "Caixa de propostas", href: "/caixa-de-propostas", icon: Inbox },
 ]
@@ -39,11 +41,12 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter()
-  const pathname = usePathname() // Hook para pegar a rota atual
+  const pathname = usePathname()
 
-  const [empresa, setEmpresa] =
-  useState<PessoaJuridica | null>(null)
+  const [empresa, setEmpresa] = useState<PessoaJuridica | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
+  // Verifica autenticação e carrega a empresa
   useEffect(() => {
     const isAuthenticated = !!localStorage.getItem("token")
 
@@ -53,8 +56,7 @@ export default function Layout({ children }: LayoutProps) {
     }
 
     async function carregarEmpresa() {
-      const result =
-        await servicesGetMinhaPessoaJuridica()
+      const result = await servicesGetMinhaPessoaJuridica()
 
       if (
         result &&
@@ -65,25 +67,30 @@ export default function Layout({ children }: LayoutProps) {
       }
     }
 
-  carregarEmpresa()
-}, [router])
+    carregarEmpresa()
+  }, [router])
+
+  // Fecha o menu mobile automaticamente ao trocar de rota
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [pathname])
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-zinc-50 text-zinc-900 font-sans antialiased selection:bg-cyan-500/20 dark:bg-black dark:text-zinc-100">
       
       {/* NAVBAR */}
-      <nav className="w-full h-16 flex items-center justify-between bg-sky-950 shadow-md shadow-zinc-950/5 px-6 md:px-10 z-50 sticky top-0 dark:bg-zinc-950">
+      <nav className="sticky top-0 z-50 border-b w-full h-16 flex items-center justify-between bg-sky-950 shadow-md shadow-zinc-950/5 px-4 md:px-7 dark:bg-zinc-950">
 
         {/* LOGO */}
-        <div className="flex items-center">
-            <img src="../med-icon.svg" alt="MedConnect Logo" className="w-8 h-8 mr-2 ml-0 filter invert" />
+        <div className="flex items-center z-50">
+          <img src="../med-icon.svg" alt="MedConnect Logo" className="w-6 h-6 mr-2 ml-0 filter invert" />
           <Link href="/catalogo" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
             MedConnect
           </Link>
         </div>
 
-        {/* MENU PRINCIPAL (Refatorado para corrigir o bug) */}
-        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2">
+        {/* MENU PRINCIPAL (DESKTOP) - Removido o absolute, adicionado flex-1 e justify-center */}
+        <div className="hidden lg:flex flex-1 justify-center items-center gap-1 xl:gap-2 mx-4">
           {NAV_LINKS.map((link) => {
             const Icon = link.icon
             const isActive = pathname === link.href
@@ -92,14 +99,14 @@ export default function Layout({ children }: LayoutProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-1.5 py-2 px-3 rounded-full transition-all duration-200 font-semibold text-sm select-none group
+                className={`flex items-center gap-1.5 py-2 px-3 rounded-full transition-all duration-200 font-semibold text-sm select-none group whitespace-nowrap
                   ${isActive 
-                    ? "bg-white/10 text-white shadow-inner shadow-white/5" // Estilo ativo
-                    : "text-zinc-400 hover:text-white hover:bg-white/10"   // Estilo inativo/hover
+                    ? "bg-white/10 text-white shadow-inner shadow-white/5" 
+                    : "text-zinc-400 hover:text-white hover:bg-white/10"
                   }
                 `}
               >
-                 <Icon 
+                <Icon 
                   size={16} 
                   className={`transition-colors duration-200 ${isActive ? "text-white" : "text-zinc-400 group-hover:text-white"}`} 
                 />
@@ -110,17 +117,15 @@ export default function Layout({ children }: LayoutProps) {
         </div>
 
         {/* AÇÕES DIREITA */}
-        <div className="flex items-center gap-4 relative">
-       
-
-        {/* USER MENU */}
+        <div className="flex items-center gap-3 z-50">
+          
+          {/* USER MENU */}
           <DropdownMenu>
-            {/* Passamos as classes diretamente para o Trigger, eliminando a prop asChild e o botão interno */}
-            <DropdownMenuTrigger className="flex items-center gap-2.5 bg-white/10 hover:bg-white/20 focus:outline-none pl-1.5 pr-4 py-1.5 rounded-full transition-all text-white border border-transparent hover:border-white/10 active:scale-[0.98] cursor-pointer outline-none ring-0">
-              <div className="w-8 h-8 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-inner">
+            <DropdownMenuTrigger className="flex items-center gap-2.5 bg-white/10 hover:bg-white/20 focus:outline-none pl-1.5 pr-2 lg:pr-4 py-1.5 rounded-full transition-all text-white border border-transparent hover:border-white/10 active:scale-[0.98] cursor-pointer outline-none ring-0">
+              <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold text-xs lg:text-sm tracking-wider shadow-inner">
                 {empresa?.nm_pessoaj?.substring(0, 2).toUpperCase() ?? "PJ"}
               </div>
-              <span className="text-sm font-semibold tracking-wide">
+              <span className="hidden lg:block text-sm font-semibold tracking-wide max-w-30 truncate">
                 {empresa?.nm_pessoaj ?? "Perfil"}
               </span>
               <ChevronDown size={14} className="text-zinc-300 transition-transform duration-300" />
@@ -133,62 +138,74 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               <DropdownMenuGroup>
-                <DropdownMenuItem className="px-4 py-2.5 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer focus:bg-zinc-50 dark:focus:bg-zinc-800">
+                <DropdownMenuItem  className="px-4 py-2.5 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer focus:bg-zinc-50 dark:focus:bg-zinc-800">
                   <Link href="/perfil" className="w-full">Perfil</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="px-4 py-2.5 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer focus:bg-zinc-50 dark:focus:bg-zinc-800">
-                  Configurações
-                </DropdownMenuItem>
+               
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator className="border-t border-zinc-100 dark:border-zinc-800 my-1" />
 
               <DropdownMenuItem
-                className="flex items-center gap-2 px-4 py-2.5 mt-1.5 text-sm font-bold text-red-600  text-left transition-colors cursor-pointer focus:text-slate-800 focus:bg-red-100"
+                className="flex items-center gap-2 px-4 py-2.5 mt-1.5 text-sm font-bold text-red-600 text-left transition-colors cursor-pointer focus:text-slate-800 focus:bg-red-100"
                 onClick={() => {
                   localStorage.removeItem("token")
                   localStorage.removeItem("cnpj")
                   router.push("/auth")
                 }}
               >
-                <LogOut size={16} className="text-red-600 " />
+                <LogOut size={16} className="text-red-600" />
                 Sair do Sistema
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* BOTÃO HAMBÚRGUER (MOBILE & TABLET) */}
+          <button 
+            className="hover:cursor-pointer lg:hidden flex items-center justify-center p-2 text-zinc-300 hover:text-white transition-colors focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Abrir menu"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* MENU PRINCIPAL (MOBILE & TABLET) */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-16 left-0 w-full bg-sky-950 border-b border-white/10 shadow-xl flex flex-col p-4 gap-2 lg:hidden z-40 animate-in slide-in-from-top-2">
+            {NAV_LINKS.map((link) => {
+              const Icon = link.icon
+              const isActive = pathname === link.href
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 font-semibold text-sm group
+                    ${isActive 
+                      ? "bg-white/10 text-white shadow-inner shadow-white/5" 
+                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    }
+                  `}
+                >
+                  <Icon 
+                    size={18} 
+                    className={`transition-colors duration-200 ${isActive ? "text-white" : "text-zinc-400 group-hover:text-white"}`} 
+                  />
+                  {link.name}
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </nav>
 
       {/* CONTEÚDO DA PÁGINA */}
       <main className="w-full flex-1 p-4 md:p-8 max-w-7xl">
         {children}
       </main>
-
-      {/* FOOTER */}
-      <footer className="w-full bg-sky-950 text-zinc-300 py-10 px-6 md:px-10 dark:bg-zinc-950 border-t border-white/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-          <div className="flex flex-col gap-2">
-            <h2 className="font-extrabold text-xl text-white tracking-wider">MedConnect</h2>
-            <p className="text-zinc-400">
-              Conectando quem possui excedentes hospitalares a quem precisa deles, facilitando negociações e transformando recursos ociosos em soluções para toda a rede de saúde.
-            </p>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-white mb-1">Navegação</h3>
-            <Link href="/#sobre" className="hover:text-white transition-colors">Sobre Nós</Link>
-            <Link href="/#como-funciona" className="hover:text-white transition-colors">Como Funciona</Link>
-            <Link href="/#planos" className="hover:text-white transition-colors">Planos</Link>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-white mb-1">Legal</h3>
-            <Link href="/termos" className="hover:text-white transition-colors">Termos de Uso</Link>
-            <Link href="/privacidade" className="hover:text-white transition-colors">Política de Privacidade</Link>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-white/10 text-center text-xs text-zinc-500">
-          © {new Date().getFullYear()} MedConnect. Todos os direitos reservados.
-        </div>
-      </footer>
+<Footer/>
+    
     </div>
   )
 }

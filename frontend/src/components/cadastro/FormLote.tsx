@@ -106,8 +106,8 @@ export default function FormLote() {
       className="space-y-6"
       onSubmit={handleSubmitLote}
     >
-      <h2 className="text-lg font-bold flex items-center gap-2 text-zinc-800 dark:text-zinc-100">
-        <Layers className="text-cyan-600" />
+      <h2 className="text-lg font-bold flex items-center gap-2 text-sky-800">
+        <Layers className="text-sky-800" />
         Cadastrar Lote
       </h2>
 

@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     
     'authentication',
     'statistics_api',
-    'gemini_api',
+   'gemini_api',
     
 ]
 
