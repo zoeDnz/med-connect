@@ -96,7 +96,7 @@ export default function Anuncios() {
         {/* cabecalho e barra de pesquisa  */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4 bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200/60">
           <div className="space-y-0.5">
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Catálogo de Insumos</h1>
+            <h1 className="text-2xl font-extrabold text-sky-800 tracking-tight">Catálogo de Insumos</h1>
             <p className="text-xs font-medium text-slate-500">
               Encontre medicamentos e produtos hospitalares disponíveis para compra!
             </p>

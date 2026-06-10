@@ -23,7 +23,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   {/* LOGO */}
  <div className="flex items-center z-50">
           <img src="../med-icon.svg" alt="MedConnect Logo" className="w-6 h-6 mr-2 ml-0 filter invert" />
-          <Link href="/catalogo" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
+          <Link href="../" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
             MedConnect
           </Link>
         </div>
