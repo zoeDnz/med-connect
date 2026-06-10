@@ -68,6 +68,7 @@ export default function PublicarAnuncioPage() {
   const [anuncioForm, setAnuncioForm] = useState({
     cd_mat: 0,
     nr_lote: 0,
+    ds_lote: "",
     qtd_mat: 0,
     val_base: "",
     ds_obs: "",
@@ -137,6 +138,7 @@ export default function PublicarAnuncioPage() {
         body: JSON.stringify({
           cd_mat: anuncioForm.cd_mat,
           nr_lote: anuncioForm.nr_lote,
+          ds_lote: lotes.find((l) => l.nr_lote === anuncioForm.nr_lote)?.ds_lote || "",
           cd_pessoa_anunciante: anuncioForm.cd_pessoa_anunciante,
           qtd_mat: anuncioForm.qtd_mat,
         }),
@@ -165,9 +167,12 @@ export default function PublicarAnuncioPage() {
 
     const valorTratadoString = anuncioForm.val_base.replace(",", ".").trim()
 
+    const selectedLote = lotes.find((l) => l.nr_lote === anuncioForm.nr_lote) || null
+
     const dataToSend: CreateAnuncioForm = {
       cd_mat: anuncioForm.cd_mat,
       nr_lote: anuncioForm.nr_lote === 0 ? null : anuncioForm.nr_lote,
+      ds_lote: selectedLote ? selectedLote.ds_lote : null,
       qtd_mat: anuncioForm.qtd_mat,
       val_base: valorTratadoString || "0.00",
       ds_obs: anuncioForm.ds_obs,
@@ -286,7 +291,7 @@ export default function PublicarAnuncioPage() {
             />
 
             <InputField
-              label="Valor Base Unitário (R$)"
+              label="Valor Base (R$)"
               icon={DollarSign}
               type="text"
               required

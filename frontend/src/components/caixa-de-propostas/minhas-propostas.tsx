@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo } from "react"
 import { Package, Calendar, Inbox, Loader2 } from "lucide-react"
 import servicesGetMinhasPropostas from "@/server/(GET)-minhas-propostas"
 import servicesGetMeusMaaterials from "@/server/(GET)-meus-materiais"
+import servicesGetMeusAnuncios from "@/server/(GET)-meus-anuncios"
 import servicesUpdateAnuncio from "@/server/(PUT)-anuncio"
 import { Anuncio, MatMed } from "@/types"
 
@@ -61,7 +62,7 @@ export function PropostasTab() {
   return (
     <div className="space-y-4">
       {propostas.map((anuncio) => {
-        const nomeMaterial = materiaisMap.get(anuncio.cd_mat) ?? "Material não identificado"
+        const nomeMaterial = anuncio.material_nome ?? "Material não identificado"
         const valorExibido = anuncio.val_proposta || anuncio.val_base
 
         return (

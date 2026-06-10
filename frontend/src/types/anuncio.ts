@@ -1,7 +1,9 @@
 export interface Anuncio {
   nr_anuncio: number
+  ds_lote: string | null
   nr_lote: number | null
   cd_mat: number
+  material_nome?: string
   qtd_mat: number
   val_base: string 
   cd_pessoa_anunciante: number
@@ -17,6 +19,7 @@ export interface Anuncio {
 
 export interface CreateAnuncioForm {
   nr_lote: number | null
+  ds_lote: string | null
   cd_mat: number
   qtd_mat: number
   val_base: string

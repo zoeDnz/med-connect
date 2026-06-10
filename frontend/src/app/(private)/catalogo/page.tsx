@@ -192,7 +192,7 @@ export default function Anuncios() {
 
                   <CardFooter className="p-5 pt-4">
                     <Button
-                      onClick={() => router.push(`/anuncio/${anuncio.nr_anuncio}`)}
+                      onClick={() => router.push(`/anunciar/${anuncio.nr_anuncio}`)}
                       className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-xl h-11 transition-colors duration-200 flex items-center justify-center gap-2 group/btn shadow-sm"
                     >
                       <ShoppingCart className="w-4 h-4" />
