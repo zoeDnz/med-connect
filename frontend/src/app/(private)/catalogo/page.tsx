@@ -192,14 +192,9 @@ export default function Anuncios() {
                   <div className="h-px bg-slate-100 mx-5" />
 
                   <CardFooter className="p-5 pt-4">
-                    <Button
-<<<<<<< HEAD
+                    < Button
                       onClick={() => router.push(`/anunciar/${anuncio.nr_anuncio}`)}
-                      className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-xl h-11 transition-colors duration-200 flex items-center justify-center gap-2 group/btn shadow-sm"
-=======
-                      onClick={() => router.push(`/anuncio/${anuncio.nr_anuncio}`)}
                       className="w-full bg-sky-800 hover:bg-sky-900 text-white font-semibold rounded-xl h-11 transition-colors duration-200 flex items-center justify-center gap-2 group/btn shadow-sm"
->>>>>>> 1488afb37affd0e03ae8dea62a372c2d139c5ea5
                     >
                       <ShoppingCart className="w-4 h-4" />
                       Ver Oferta
