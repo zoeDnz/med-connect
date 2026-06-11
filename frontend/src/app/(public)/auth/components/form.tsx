@@ -54,13 +54,13 @@ export default function Form(): JSX.Element {
       
       if ("isError" in response) { return }
       
-      localStorage.setItem("token", response.access)
+      localStorage.setItem("access_token", response.access)   // ← muda
+      localStorage.setItem("refresh_token", response.refresh) // ← adiciona
       localStorage.setItem("cnpj", response.cnpj)
       localStorage.setItem("userId", String(response.id))
       router.push("/catalogo")
     })
   }
-
   const onRegister = (data: z.infer<typeof registerSchema>): void => {
     startSubmit(async () => {
       const response = await servicesRegister(data)

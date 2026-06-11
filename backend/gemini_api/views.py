@@ -54,7 +54,7 @@ class GerarDescricaoAnuncioView(APIView):
         - Nome do Item: {material.ds_mat}
         - Marca: {marca_nome}
         - Fabricante: {fabricante_nome}
-        - Número do Lote: {lote.nr_lote}
+        - Código do Lote: {lote.ds_lote}
         - Data de Validade: {validade_formatada}
         
         Logística:

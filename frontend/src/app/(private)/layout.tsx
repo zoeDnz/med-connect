@@ -27,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-// Array de links para manter o código limpo (DRY)
 const NAV_LINKS = [
   { name: "Catálogo", href: "/catalogo", icon: Store },
   { name: "Cadastro", href: "/cadastrar", icon: FileText },
@@ -46,9 +45,8 @@ export default function Layout({ children }: LayoutProps) {
   const [empresa, setEmpresa] = useState<PessoaJuridica | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  // Verifica autenticação e carrega a empresa
   useEffect(() => {
-    const isAuthenticated = !!localStorage.getItem("token")
+    const isAuthenticated = !!localStorage.getItem("access_token") // ← corrigido
 
     if (!isAuthenticated) {
       router.push("/auth")
@@ -70,7 +68,6 @@ export default function Layout({ children }: LayoutProps) {
     carregarEmpresa()
   }, [router])
 
-  // Fecha o menu mobile automaticamente ao trocar de rota
   useEffect(() => {
     setIsMobileMenuOpen(false)
   }, [pathname])
@@ -78,10 +75,8 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-zinc-50 text-zinc-900 font-sans antialiased selection:bg-cyan-500/20 dark:bg-black dark:text-zinc-100">
       
-      {/* NAVBAR */}
       <nav className="sticky top-0 z-50 border-b w-full h-16 flex items-center justify-between bg-sky-950 shadow-md shadow-zinc-950/5 px-4 md:px-7 dark:bg-zinc-950">
 
-        {/* LOGO */}
         <div className="flex items-center z-50">
           <img src="../med-icon.svg" alt="MedConnect Logo" className="w-6 h-6 mr-2 ml-0 filter invert" />
           <Link href="/catalogo" className="font-extrabold text-xl text-white tracking-wider hover:opacity-95 transition-opacity">
@@ -89,7 +84,6 @@ export default function Layout({ children }: LayoutProps) {
           </Link>
         </div>
 
-        {/* MENU PRINCIPAL (DESKTOP) - Removido o absolute, adicionado flex-1 e justify-center */}
         <div className="hidden lg:flex flex-1 justify-center items-center gap-1 xl:gap-2 mx-4">
           {NAV_LINKS.map((link) => {
             const Icon = link.icon
@@ -116,10 +110,8 @@ export default function Layout({ children }: LayoutProps) {
           })}
         </div>
 
-        {/* AÇÕES DIREITA */}
         <div className="flex items-center gap-3 z-50">
           
-          {/* USER MENU */}
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2.5 bg-white/10 hover:bg-white/20 focus:outline-none pl-1.5 pr-2 lg:pr-4 py-1.5 rounded-full transition-all text-white border border-transparent hover:border-white/10 active:scale-[0.98] cursor-pointer outline-none ring-0">
               <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold text-xs lg:text-sm tracking-wider shadow-inner">
@@ -138,10 +130,9 @@ export default function Layout({ children }: LayoutProps) {
               </div>
               
               <DropdownMenuGroup>
-                <DropdownMenuItem  className="px-4 py-2.5 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer focus:bg-zinc-50 dark:focus:bg-zinc-800">
+                <DropdownMenuItem className="px-4 py-2.5 text-sm font-semibold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer focus:bg-zinc-50 dark:focus:bg-zinc-800">
                   <Link href="/perfil" className="w-full">Perfil</Link>
                 </DropdownMenuItem>
-               
               </DropdownMenuGroup>
 
               <DropdownMenuSeparator className="border-t border-zinc-100 dark:border-zinc-800 my-1" />
@@ -149,7 +140,8 @@ export default function Layout({ children }: LayoutProps) {
               <DropdownMenuItem
                 className="flex items-center gap-2 px-4 py-2.5 mt-1.5 text-sm font-bold text-red-600 text-left transition-colors cursor-pointer focus:text-slate-800 focus:bg-red-100"
                 onClick={() => {
-                  localStorage.removeItem("token")
+                  localStorage.removeItem("access_token") // ← corrigido
+                  localStorage.removeItem("refresh_token") // ← adicionado
                   localStorage.removeItem("cnpj")
                   router.push("/auth")
                 }}
@@ -160,7 +152,6 @@ export default function Layout({ children }: LayoutProps) {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* BOTÃO HAMBÚRGUER (MOBILE & TABLET) */}
           <button 
             className="hover:cursor-pointer lg:hidden flex items-center justify-center p-2 text-zinc-300 hover:text-white transition-colors focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -170,7 +161,6 @@ export default function Layout({ children }: LayoutProps) {
           </button>
         </div>
 
-        {/* MENU PRINCIPAL (MOBILE & TABLET) */}
         {isMobileMenuOpen && (
           <div className="absolute top-16 left-0 w-full bg-sky-950 border-b border-white/10 shadow-xl flex flex-col p-4 gap-2 lg:hidden z-40 animate-in slide-in-from-top-2">
             {NAV_LINKS.map((link) => {
@@ -200,11 +190,10 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </nav>
 
-      {/* CONTEÚDO DA PÁGINA */}
       <main className="w-full flex-1 p-4 md:p-8 max-w-7xl">
         {children}
       </main>
-<Footer/>
+      <Footer/>
     
     </div>
   )

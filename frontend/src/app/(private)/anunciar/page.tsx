@@ -138,7 +138,7 @@ export default function PublicarAnuncioPage() {
         body: JSON.stringify({
           cd_mat: anuncioForm.cd_mat,
           nr_lote: anuncioForm.nr_lote,
-          ds_lote: lotes.find((l) => l.nr_lote === anuncioForm.nr_lote)?.ds_lote || "",
+          ds_lote: anuncioForm.ds_lote,
           cd_pessoa_anunciante: anuncioForm.cd_pessoa_anunciante,
           qtd_mat: anuncioForm.qtd_mat,
         }),
@@ -233,7 +233,12 @@ export default function PublicarAnuncioPage() {
                 <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm h-10">
                   <div className="flex items-center gap-2 text-zinc-500">
                     <Package size={16} />
-                    <SelectValue placeholder="Selecione o insumo cadastrado" />
+                    {anuncioForm.cd_mat
+                      ? materiais.find(
+                          (material) =>
+                            material.cd_mat === anuncioForm.cd_mat
+                        )?.ds_mat
+                      : "Selecione o insumo cadastrado"}
                   </div>
                 </SelectTrigger>
                 <SelectContent>
@@ -257,9 +262,23 @@ export default function PublicarAnuncioPage() {
                 required
               >
                 <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm h-10">
-                  <div className="flex items-center gap-2 text-zinc-500">
+                  <div
+                    className={`flex items-center gap-2 ${
+                      anuncioForm.nr_lote
+                        ? "text-zinc-900 dark:text-zinc-100"
+                        : "text-zinc-500"
+                    }`}
+                  >
                     <Layers size={16} />
-                    <SelectValue placeholder={anuncioForm.cd_mat ? "Selecione um lote" : "Selecione um insumo primeiro"} />
+
+                    {anuncioForm.nr_lote
+                      ? lotesFiltrados.find(
+                          (lote) =>
+                            String(lote.nr_lote) === String(anuncioForm.nr_lote)
+                        )?.ds_lote
+                      : anuncioForm.cd_mat
+                        ? "Selecione um lote"
+                        : "Selecione um insumo primeiro"}
                   </div>
                 </SelectTrigger>
                 <SelectContent>

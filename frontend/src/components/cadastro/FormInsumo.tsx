@@ -143,7 +143,12 @@ export default function FormInsumo() {
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder="Selecione uma categoria" />
+            {insumoForm.ds_tipo
+              ? categories.find(
+                  (categoria) =>
+                    categoria.cd_tipo === insumoForm.ds_tipo
+                )?.ds_tipo
+              : "Selecione uma categoria"}
           </SelectTrigger>
 
           <SelectContent>
@@ -167,11 +172,7 @@ export default function FormInsumo() {
           </label>
 
           <Select
-            value={
-              insumoForm.ds_marca
-                ? String(insumoForm.ds_marca)
-                : undefined
-            }
+            value={String(insumoForm.ds_marca || "")}
             onValueChange={(value) =>
               setInsumoForm((prev) => ({
                 ...prev,
@@ -180,7 +181,12 @@ export default function FormInsumo() {
             }
           >
             <SelectTrigger>
-              <SelectValue placeholder="Selecione" />
+              {insumoForm.ds_marca
+                ? brands.find(
+                    (marca) =>
+                      marca.cd_marca === insumoForm.ds_marca
+                  )?.ds_marca
+                : "Selecione"}
             </SelectTrigger>
 
             <SelectContent>
