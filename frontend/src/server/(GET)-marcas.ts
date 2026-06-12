@@ -9,7 +9,7 @@ declare const process: {
 }
 
 export default async function servicesGetMarcas() {
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("access_token")
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/medconnect/marcas/`, {
     method: "GET",

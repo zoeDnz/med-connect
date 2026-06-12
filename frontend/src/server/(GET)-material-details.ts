@@ -5,7 +5,7 @@ import { MatMed } from "@/types"
 export default async function servicesGetMaterialDetails(
   materialId: string
 ): Promise<MatMed | { isError: true; status: number }> {
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("access_token")
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/medconnect/mat_med/${materialId}`,

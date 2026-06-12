@@ -3,7 +3,7 @@
 import { MatMed } from "@/types"
 
 export default async function servicesGetMaterials() {
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("access_token")
 
   if (!token) {
     return {

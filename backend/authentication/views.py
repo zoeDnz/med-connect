@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from django.contrib.auth.hashers import make_password, check_password
 from pessoa_juridica.models import PessoaJuridica
 
 
@@ -21,15 +21,12 @@ def login(request):
     cnpj = cnpj.replace(".", "").replace("/", "").replace("-", "")
 
     # busca no banco
-    user = PessoaJuridica.objects.filter(
-        nr_cnpj=cnpj,
-        senha_pj=password
-    ).first()
+    user = PessoaJuridica.objects.filter(nr_cnpj=cnpj).first()
 
-    if not user:
-        return Response(
-            {"error": "Credenciais inválidas"},
-            status=status.HTTP_401_UNAUTHORIZED
+    if not user or not check_password(password, user.senha_pj): 
+        return Response( 
+            {"error": "Credenciais inválidas"}, 
+            status=status.HTTP_401_UNAUTHORIZED 
         )
     if user.status == "PENDENTE":
         return Response(
@@ -46,19 +43,17 @@ def login(request):
             },
             status=status.HTTP_403_FORBIDDEN
         )
-    # ❌ NÃO usar for_user (não existe User padrão no seu model)
-    refresh = RefreshToken()
     
-    # payload customizado
+    refresh = RefreshToken()
     refresh["cnpj"] = user.nr_cnpj
     refresh["id"] = user.cd_pessoaj
     refresh["name"] = user.nm_pessoaj
 
     return Response({
-    "id": user.cd_pessoaj,
-    "cnpj": user.nr_cnpj,
-    "access": str(refresh.access_token),
-    "refresh": str(refresh),
+        "id": user.cd_pessoaj,
+        "cnpj": user.nr_cnpj,
+        "access": str(refresh.access_token),
+        "refresh": str(refresh),
     })
 
 @api_view(['POST'])
@@ -93,20 +88,16 @@ def register(request):
         .replace("-", "")
     )
 
-    if PessoaJuridica.objects.filter(
-        nr_cnpj=nr_cnpj
-    ).exists():
+    if PessoaJuridica.objects.filter(nr_cnpj=nr_cnpj).exists():
         return Response(
-            {
-                "error": "CNPJ já cadastrado"
-            },
+            {"error": "CNPJ já cadastrado"},
             status=status.HTTP_400_BAD_REQUEST
         )
 
     empresa = PessoaJuridica.objects.create(
         nm_pessoaj=nm_pessoaj,
         email_pj=email_pj,
-        senha_pj=senha_pj,
+        senha_pj=make_password(senha_pj),
         resp_tec=resp_tec,
         nr_cnpj=nr_cnpj,
         razao_social=razao_social,
