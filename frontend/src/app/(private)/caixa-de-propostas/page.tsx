@@ -29,10 +29,8 @@ export default function CaixaDePropostasPage() {
   useEffect(() => {
     const tab = searchParams.get("tab")
 
-    if (tab) {
-      setActiveTab(tab)
-    }
-  }, [searchParams])
+    setActiveTab(tab ?? "negociacao")
+  }, [searchParams.toString()])
 
   return (
     <div className="max-w-5xl mx-auto py-10 px-4 md:px-0 font-sans">

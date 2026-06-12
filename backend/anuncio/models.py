@@ -7,7 +7,7 @@ class Anuncio(models.Model):
     STATUS_CHOICES = [
         ('A', 'Ativo'),         # Anúncio público, aguardando propostas
         ('N', 'Em Negociação'), # Proposta recebida, anúncio travado — apenas 1 comprador negociando
-        ('F', 'Finalizado'),    # Negócio fechado, val_aceito registrado
+        ('F', 'Finalizado'),    # contato já foi liberado e negociação saiu da plataforma
         ('I', 'Inativo'),       # Removido por validade, inconformidade ou manualmente
     ]
 

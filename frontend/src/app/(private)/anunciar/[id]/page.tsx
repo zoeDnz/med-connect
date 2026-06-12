@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { ShoppingCart, Handshake } from "lucide-react"
+import { ShoppingCart, Handshake, CheckCircle2 } from "lucide-react"
 
 import servicesGetAnuncioDetails from "@/server/(GET)-anuncio-details"
 import servicesUpdateAnuncio from "@/server/(PUT)-anuncio"
@@ -16,6 +16,8 @@ export default function AnuncioDetalhePage() {
   const [loading, setLoading] = useState(true)
   const [valorProposta, setValorProposta] = useState("")
   const [modo, setModo] = useState<"COMPRA" | "PROPOSTA">("COMPRA")
+  const [modalSucesso, setModalSucesso] = useState<"COMPRA" | "PROPOSTA" | null>(null)
+  const [erroModal, setErroModal] = useState<string | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -39,7 +41,7 @@ export default function AnuncioDetalhePage() {
   async function handleCompraDireta() {
     if (!anuncio) return
     const cdPessoa = Number(localStorage.getItem("userId"))
-    if (!cdPessoa) { alert("Usuário não autenticado"); return }
+    if (!cdPessoa) { setErroModal("Usuário não autenticado"); return }
 
     const res = await servicesUpdateAnuncio(Number(id), {
       cd_pessoa_compradora: cdPessoa,
@@ -47,16 +49,15 @@ export default function AnuncioDetalhePage() {
       ie_status: "N",
     })
 
-    if ("isError" in res) { alert("Erro ao realizar compra: " + res.message); return }
-    alert("Solicitação de compra realizada com sucesso!")
-    router.push("/caixa-de-propostas?tab=compras")
+    if ("isError" in res) { setErroModal("Erro ao realizar compra: " + (res as any).message); return }
+    setModalSucesso("COMPRA")
   }
 
   async function handleProposta() {
     if (!anuncio) return
     const cdPessoa = Number(localStorage.getItem("userId"))
-    if (!cdPessoa) { alert("Usuário não autenticado"); return }
-    if (!valorProposta || Number(valorProposta) <= 0) { alert("Informe um valor de proposta válido"); return }
+    if (!cdPessoa) { setErroModal("Usuário não autenticado"); return }
+    if (!valorProposta || Number(valorProposta) <= 0) { setErroModal("Informe um valor de proposta válido"); return }
 
     const res = await servicesUpdateAnuncio(Number(id), {
       cd_pessoa_compradora: cdPessoa,
@@ -64,9 +65,8 @@ export default function AnuncioDetalhePage() {
       ie_status: "N",
     })
 
-    if ("isError" in res) { alert("Erro ao enviar proposta: " + res.message); return }
-    alert("Proposta enviada com sucesso!")
-    router.push("/caixa-de-propostas?tab=compras")
+    if ("isError" in res) { setErroModal("Erro ao enviar proposta: " + (res as any).message); return }
+    setModalSucesso("PROPOSTA")
   }
 
   if (loading) return <div className="p-10 text-zinc-500">Carregando...</div>
@@ -118,7 +118,6 @@ export default function AnuncioDetalhePage() {
         <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-6 md:p-8 shadow-sm">
           <p className="text-base font-semibold text-zinc-700 mb-5">Fazer Oferta</p>
 
-          {/* toggle modo */}
           <div className="flex gap-2 mb-6">
             {(["COMPRA", "PROPOSTA"] as const).map((m) => (
               <button
@@ -136,8 +135,6 @@ export default function AnuncioDetalhePage() {
           </div>
 
           <div className="space-y-5">
-
-            {/* valor sugerido — só aparece no modo PROPOSTA */}
             {modo === "PROPOSTA" && (
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-semibold text-zinc-700">Valor proposto (R$)</label>
@@ -151,7 +148,6 @@ export default function AnuncioDetalhePage() {
               </div>
             )}
 
-            {/* resumo valor */}
             <div className="flex items-center justify-between bg-white border border-zinc-200 rounded-lg px-4 py-3 text-sm">
               <span className="text-zinc-500">
                 {modo === "COMPRA" ? "Valor base" : "Valor proposto"}
@@ -161,25 +157,23 @@ export default function AnuncioDetalhePage() {
               </span>
             </div>
 
-            {/* botão */}
             {modo === "COMPRA" ? (
               <button
                 onClick={handleCompraDireta}
                 className="w-full flex items-center justify-center gap-2 bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg transition-colors text-sm cursor-pointer"
               >
                 <ShoppingCart className="w-4 h-4" />
-                Comprar Agora
+                Solicitar compra
               </button>
             ) : (
               <button
                 onClick={handleProposta}
                 className="w-full flex items-center justify-center gap-2 bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg transition-colors text-sm cursor-pointer"
               >
-                <Handshake className="w-4 h-4" />
+                <ShoppingCart className="w-4 h-4" />
                 Enviar Proposta
               </button>
             )}
-
           </div>
         </div>
       )}
@@ -190,6 +184,68 @@ export default function AnuncioDetalhePage() {
       >
         ‹ Voltar
       </button>
+
+      {/* MODAL DE SUCESSO */}
+      {modalSucesso && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] p-4">
+          <div className="bg-white rounded-2xl w-full max-w-[420px] overflow-hidden shadow-xl">
+
+            <div className="bg-emerald-50 border-b border-emerald-100 px-5 py-4 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-emerald-800">
+                  {modalSucesso === "COMPRA" ? "Compra solicitada!" : "Proposta enviada com sucesso!"}
+                </p>
+                <p className="text-xs text-emerald-600">
+                  {modalSucesso === "COMPRA"
+                    ? "Aguarde a confirmação da vendedora para entrar em contato."
+                    : "A vendedora será notificada da sua proposta."}
+                </p>
+              </div>
+            </div>
+
+            <div className="p-5 flex flex-col gap-3">
+              <p className="text-sm text-zinc-600">
+                Você pode acompanhar o andamento em <span className="font-semibold text-sky-700">Minhas Negociações</span>.
+              </p>
+              <button
+                onClick={() => router.push("/caixa-de-propostas?tab=compras")}
+                className="w-full px-4 py-2.5 rounded-lg bg-sky-950 text-white text-sm font-bold hover:bg-sky-900 transition"
+              >
+                Ver Minhas Negociações
+              </button>
+              <button
+                onClick={() => setModalSucesso(null)}
+                className="w-full px-4 py-2.5 rounded-lg border border-zinc-200 text-sm font-medium text-zinc-500 hover:bg-zinc-50 transition"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE ERRO */}
+      {erroModal && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[9999] p-4">
+          <div className="bg-white rounded-2xl w-full max-w-[380px] overflow-hidden shadow-xl">
+            <div className="bg-red-50 border-b border-red-100 px-5 py-4">
+              <p className="text-sm font-semibold text-red-700">Algo deu errado</p>
+              <p className="text-xs text-red-500 mt-0.5">{erroModal}</p>
+            </div>
+            <div className="p-5">
+              <button
+                onClick={() => setErroModal(null)}
+                className="w-full px-4 py-2.5 rounded-lg border border-zinc-200 text-sm font-medium text-zinc-500 hover:bg-zinc-50 transition"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )

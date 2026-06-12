@@ -32,11 +32,19 @@ const TABS = [
   },
   {
     id: "compras",
-    label: "Minhas Compras",
+    label: "Minhas Negociações",
+    icon: History,
+    filter: () => true,
+  },
+  {
+    id: "contatos",
+    label: "Contatos Salvos",
     icon: History,
     filter: () => true,
   },
 ]
+
+
 
 // Helpers de badge
 function getStatusBadge(ie_status: 'A' | 'N' | 'F' | 'I') {
@@ -52,6 +60,57 @@ function getStatusBadge(ie_status: 'A' | 'N' | 'F' | 'I') {
     default:
       return { label: "DESCONHECIDO", className: "bg-zinc-100 text-zinc-600 border-zinc-200" }
   }
+}
+
+function ContatosSalvos() {
+  const [contatos, setContatos] = useState<any[]>([])
+
+  useEffect(() => {
+    const salvos = JSON.parse(localStorage.getItem("contatos_negociacao") || "[]")
+    setContatos(salvos)
+  }, [])
+
+  function remover(nr_anuncio: number) {
+    const atualizados = contatos.filter((c) => c.nr_anuncio !== nr_anuncio)
+    setContatos(atualizados)
+    localStorage.setItem("contatos_negociacao", JSON.stringify(atualizados))
+  }
+
+  if (contatos.length === 0) return null
+
+  return (
+    <div className="mt-8">
+      <h2 className="text-sm font-bold text-zinc-500 uppercase tracking-widest mb-3">
+        Contatos liberados
+      </h2>
+      <div className="flex flex-col gap-3">
+        {contatos.map((c) => (
+          <div key={c.nr_anuncio} className="bg-white border border-zinc-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 font-bold text-sm shrink-0">
+                {c.nome?.split(" ").slice(0, 2).map((n: string) => n[0]).join("").toUpperCase()}
+              </div>
+              <div>
+                <p className="font-semibold text-zinc-800 text-sm">{c.nome}</p>
+                <p className="text-xs text-zinc-400">Anúncio #{c.nr_anuncio} · {c.data}</p>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2 text-xs items-center">
+              <a href={`mailto:${c.email}`} className="flex items-center gap-1.5 bg-sky-50 text-sky-700 border border-sky-100 px-3 py-1.5 rounded-lg font-medium hover:bg-sky-100 transition">
+                ✉ {c.email}
+              </a>
+              <button
+                onClick={() => remover(c.nr_anuncio)}
+                className="flex items-center gap-1.5 bg-red-50 text-red-500 border border-red-100 px-3 py-1.5 rounded-lg font-medium hover:bg-red-100 transition"
+              >
+                × Remover
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default function HistoricoPage() {
@@ -90,10 +149,30 @@ export default function HistoricoPage() {
         setAnuncios(listaAnuncios)
 
       if (Array.isArray(listaCompras)) {
-        console.log("SETANDO COMPRAS:", listaCompras)
         setCompras(listaCompras)
-      }
 
+        // Verifica compras finalizadas e salva contato da vendedora
+        const chave = "contatos_negociacao"
+        const existentes: any[] = JSON.parse(localStorage.getItem(chave) || "[]")
+
+        listaCompras
+          .filter((c: Anuncio) => c.ie_status === "F")
+          .forEach((c: Anuncio) => {
+            const jaExiste = existentes.some((e) => e.nr_anuncio === c.nr_anuncio)
+            if (!jaExiste && c.contato_vendedor) {
+              existentes.push({
+                nr_anuncio: c.nr_anuncio,
+                cd_mat: c.cd_mat,
+                data: new Date().toLocaleDateString("pt-BR"),
+                nome: c.contato_vendedor.nome,
+                email: c.contato_vendedor.email,
+              })
+            }
+          })
+
+        localStorage.setItem(chave, JSON.stringify(existentes))
+      }
+      
       setLoading(false)
     }
 
@@ -102,14 +181,11 @@ export default function HistoricoPage() {
 
   // Filtra os itens a exibir com base na aba ativa e no cdPessoa para a aba de compras
   const itensFiltrados = useMemo(() => {
-    if (activeTab === "compras") {
-      return compras
-    }
+    if (activeTab === "compras") return compras
+    if (activeTab === "contatos") return []   // ← aba não usa essa lista
 
     const tab = TABS.find((t) => t.id === activeTab)
-
     if (!tab) return []
-
     return anuncios.filter((a) => tab.filter(a, cdPessoa))
   }, [anuncios, compras, activeTab, cdPessoa])
 
@@ -143,7 +219,7 @@ export default function HistoricoPage() {
           <div className="flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 text-sky-600 animate-spin" />
           </div>
-        ) : itensFiltrados.length === 0 ? (
+        ) : itensFiltrados.length === 0 && activeTab !== "contatos" ? (
           <div className="bg-white border border-dashed border-zinc-300 p-12 rounded-2xl flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 bg-zinc-50 rounded-full flex items-center justify-center mb-4">
               <Inbox className="w-8 h-8 text-zinc-400" />
@@ -225,6 +301,7 @@ export default function HistoricoPage() {
           })
         )}
       </div>
+      {activeTab === "contatos" && <ContatosSalvos />}
     </div>
   )
 }

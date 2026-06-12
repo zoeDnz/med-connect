@@ -2,8 +2,10 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from anuncio.models import Anuncio
 from anuncio.serializers import AnuncioSerializer
+
 
 # View que retorna somente os anúncios onde o usuário é o anunciante
 @api_view(["GET"])
@@ -15,6 +17,7 @@ def meus_anuncios(request):
 
     serializer = AnuncioSerializer(anuncios, many=True)
     return Response(serializer.data)
+
 
 # View que retorna somente os anúncios onde o usuário é o comprador e o status é 'F' (finalizado)
 @api_view(["GET"])
@@ -28,18 +31,20 @@ def minhas_compras(request):
     serializer = AnuncioSerializer(anuncios, many=True)
     return Response(serializer.data)
 
-# View que retorna somente os anúncios onde o usuário é o anunciante e o status é 'N' (em andamento)
+
+# View que retorna somente os anúncios onde o usuário é o comprador (negociações ativas)
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def minhas_propostas(request):
     anuncios = Anuncio.objects.filter(
-    cd_pessoa_compradora=request.user
-        ).exclude(
-            ie_status='F'
-        ).order_by('-data_anuncio')
+        cd_pessoa_compradora=request.user
+    ).exclude(
+        ie_status='F'
+    ).order_by('-data_anuncio')
 
     serializer = AnuncioSerializer(anuncios, many=True)
     return Response(serializer.data)
+
 
 class AnuncioCreateListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
@@ -76,12 +81,17 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AnuncioSerializer
     lookup_field = 'nr_anuncio'
 
-    def perform_update(self, serializer):
-        status_anterior = self.get_object().ie_status
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        status_anterior = instance.ie_status
 
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
         anuncio = serializer.save()
 
-        # A → F: proposta igual ao valor base, finaliza automaticamente
+        contato = None
+
+        # A → F automático
         if (
             status_anterior == 'A'
             and anuncio.val_proposta
@@ -91,7 +101,7 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.val_aceito = anuncio.val_base
             anuncio.save()
 
-        # A → N: proposta diferente do valor base, fica em andamento
+        # A → N
         elif (
             status_anterior == 'A'
             and anuncio.val_proposta
@@ -100,8 +110,7 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.ie_status = 'N'
             anuncio.save()
 
-        # N → F: anunciante aceitou proposta diferente
-        # Frontend manda: ie_status = 'F' + cd_pessoa_compradora
+        # N → F (aceitar proposta)
         elif (
             status_anterior == 'N'
             and anuncio.ie_status == 'F'
@@ -109,8 +118,12 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.val_aceito = anuncio.val_proposta
             anuncio.save()
 
-        # N → A: anunciante recusou, limpa tudo e volta ativo
-        # Frontend manda: ie_status = 'A'
+            contato = {
+                "email": anuncio.cd_pessoa_compradora.email_pj, 
+                "nome": anuncio.cd_pessoa_compradora.nm_pessoaj,
+            }
+
+        # N → A (recusar)
         elif (
             status_anterior == 'N'
             and anuncio.ie_status == 'A'
@@ -119,3 +132,12 @@ class AnuncioRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
             anuncio.val_aceito = None
             anuncio.cd_pessoa_compradora = None
             anuncio.save()
+
+        return Response({
+            "nr_anuncio": anuncio.nr_anuncio,
+            "ie_status": anuncio.ie_status,
+            "val_base": anuncio.val_base,
+            "val_proposta": anuncio.val_proposta,
+            "val_aceito": anuncio.val_aceito,
+            "contato": contato
+        })

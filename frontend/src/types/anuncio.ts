@@ -10,6 +10,11 @@ export interface Anuncio {
   ds_obs: string
   data_anuncio: string
   ie_status: 'A' | 'N' | 'F' | 'I'
+  
+  contato_vendedor?: {
+    nome: string
+    email: string
+  } | null
 
   // Novos campos vindos da unificação da negociação
   val_proposta: string | null
