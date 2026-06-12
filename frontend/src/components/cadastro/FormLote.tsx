@@ -76,6 +76,24 @@ export default function FormLote() {
   async function handleSubmitLote(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    const dataFabricacao = new Date(loteForm.dt_fabricacao)
+
+    if (dataFabricacao > new Date()) {
+      setError("A data de fabricação não pode ser futura.")
+      return
+    }
+
+    if (
+      loteForm.dt_validade &&
+      loteForm.dt_fabricacao &&
+      loteForm.dt_validade <= loteForm.dt_fabricacao.split("T")[0]
+    ) {
+      setError(
+        "A data de validade deve ser posterior à data de fabricação."
+      )
+      return
+    }
+
     // Correção: Envolvendo o valor em String() para evitar o erro do TypeScript
     if (!String(loteForm.ds_lote).trim()) {
       setError("A identificação do lote não pode estar vazia.")
@@ -148,7 +166,7 @@ export default function FormLote() {
           </label>
 
           <Select
-            value={loteForm.cd_material ? String(loteForm.cd_material) : undefined}
+            value={String(loteForm.cd_material || "")}
             onValueChange={(value) =>
               setLoteForm((prev) => ({
                 ...prev,
@@ -158,7 +176,12 @@ export default function FormLote() {
             disabled={loading || materiais.length === 0}
           >
             <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm">
-              <SelectValue placeholder="Selecione o insumo" />
+              {loteForm.cd_material
+                ? materiais.find(
+                    (material) =>
+                      material.cd_mat === loteForm.cd_material
+                  )?.ds_mat
+                : "Selecione o insumo"}
             </SelectTrigger>
 
             <SelectContent>
@@ -198,6 +221,13 @@ export default function FormLote() {
           label="Data de Fabricação"
           icon={Calendar}
           type="datetime-local"
+          max={
+            new Date(
+              Date.now() - new Date().getTimezoneOffset() * 60000
+            )
+              .toISOString()
+              .slice(0, 16)
+          }
           value={loteForm.dt_fabricacao}
           onChange={(event) =>
             setLoteForm((prev) => ({
@@ -212,6 +242,11 @@ export default function FormLote() {
           label="Data de Validade"
           icon={Calendar}
           type="date"
+          min={
+            loteForm.dt_fabricacao
+              ? loteForm.dt_fabricacao.split("T")[0]
+              : undefined
+          }
           value={loteForm.dt_validade}
           onChange={(event) =>
             setLoteForm((prev) => ({
@@ -230,7 +265,7 @@ export default function FormLote() {
           </label>
 
           <Select
-            value={loteForm.fabricante ? String(loteForm.fabricante) : undefined}
+            value={String(loteForm.fabricante || "")}
             onValueChange={(value) =>
               setLoteForm((prev) => ({
                 ...prev,
@@ -240,7 +275,12 @@ export default function FormLote() {
             disabled={loading || fabricantes.length === 0}
           >
             <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm">
-              <SelectValue placeholder="Selecione o fabricante" />
+              {loteForm.fabricante
+                ? fabricantes.find(
+                    (fabricante) =>
+                      fabricante.cd_fabricante === loteForm.fabricante
+                  )?.ds_fabricante
+                : "Selecione o fabricante"}
             </SelectTrigger>
 
             <SelectContent>
