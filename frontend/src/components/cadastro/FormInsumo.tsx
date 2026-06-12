@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Package, Tag, Layers, Hash } from "lucide-react"
+import { Package, Tag, Hash, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import {
   Select,
@@ -26,11 +27,14 @@ import servicesGetMarcas from "@/server/(GET)-marcas"
 import servicesCreateMatMed from "@/server/(POST)-mat-med"
 
 export default function FormInsumo() {
+  const router = useRouter()
   const [categories, setCategories] = useState<TipoMatMed[]>([])
   const [brands, setBrands] = useState<Marca[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
-  const [insumoForm, setInsumoForm] =
-  useState<CreateMatMedForm>({
+  const [insumoForm, setInsumoForm] = useState<CreateMatMedForm>({
     ds_mat: "",
     ds_marca: 0,
     ds_tipo: "" as any,
@@ -50,25 +54,18 @@ export default function FormInsumo() {
           servicesGetMarcas(),
         ])
 
-      if (
-        responseCategory &&
-        !("isError" in responseCategory)
-      ) {
+      if (responseCategory && !("isError" in responseCategory)) {
         setCategories(responseCategory)
       }
 
-      if (
-        responseBrand &&
-        !("isError" in responseBrand)
-      ) {
+      if (responseBrand && !("isError" in responseBrand)) {
         setBrands(responseBrand)
       }
     }
 
     initialize()
 
-    const userId =
-      Number(localStorage.getItem("userId") || 0)
+    const userId = Number(localStorage.getItem("userId") || 0)
 
     setInsumoForm((prev) => ({
       ...prev,
@@ -76,45 +73,88 @@ export default function FormInsumo() {
     }))
   }, [])
 
-  async function handleSubmit(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
+  
+  const categoriaSelecionada = categories.find(
+    (c) => String(c.cd_tipo) === String(insumoForm.ds_tipo)
+  )
+
+  const marcaSelecionada = brands.find(
+    (b) => String(b.cd_marca) === String(insumoForm.ds_marca)
+  )
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const response =
-      await servicesCreateMatMed(insumoForm)
-
-    if ("isError" in response) {
-      console.error(response.message)
+    if (!insumoForm.ds_mat.trim()) {
+      setError("O nome do insumo não pode estar vazio.")
       return
     }
 
-    setInsumoForm((prev) => ({
-      ...prev,
+    if (!insumoForm.ds_tipo || String(insumoForm.ds_tipo).trim() === "") {
+      setError("Por favor, selecione uma categoria válida.")
+      return
+    }
 
+    if (!insumoForm.ds_marca) {
+      setError("Por favor, selecione uma marca válida.")
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
+
+    const response = await servicesCreateMatMed(insumoForm)
+
+    setLoading(false)
+
+    if (response && "isError" in response && (response as any).isError !== false) {
+      setError((response as any).message || "Erro ao cadastrar o insumo. Verifique os dados.")
+      return
+    }
+
+    setSuccess(true)
+    
+    // Limpa o formulário mantendo o ID do usuário ativo
+    const userId = Number(localStorage.getItem("userId") || 0)
+    setInsumoForm({
       ds_mat: "",
       ds_marca: 0,
       ds_tipo: "" as any,
-      ds_pessoaj: 0,
-
+      ds_pessoaj: userId,
       cd_tiss: "",
       cd_tuss: "",
       cd_simpro: "",
       cd_brasindice: "",
-    }))
+    })
+
+    setTimeout(() => {
+      router.refresh()
+    }, 2000)
   }
 
   return (
-    <form
-      className="space-y-6"
-      onSubmit={handleSubmit}
-    >
+    <form className="space-y-6" onSubmit={handleSubmit}>
       <h2 className="text-lg font-bold flex items-center gap-2 text-sky-800">
         <Package className="text-sky-800" />
         Cadastrar Insumo
       </h2>
 
-      {/* Nome + Categoria */}
+      {/*  alertas feedback pro usuario */}
+      {error && (
+        <div className="flex items-center gap-2 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-zinc-800 dark:text-red-400 border border-red-200 dark:border-red-900">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success && (
+        <div className="flex items-center gap-2 p-4 text-sm text-emerald-800 rounded-lg bg-emerald-50 dark:bg-zinc-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span>Insumo cadastrado com sucesso!</span>
+        </div>
+      )}
+
       <InputField
         label="Nome do Insumo"
         icon={Tag}
@@ -126,29 +166,29 @@ export default function FormInsumo() {
             ds_mat: event.target.value,
           }))
         }
+        disabled={loading}
+        required
       />
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-semibold">
+        <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
           Categoria
         </label>
 
         <Select
-          value={insumoForm.ds_tipo}
+          value={insumoForm.ds_tipo ? String(insumoForm.ds_tipo) : ""}
           onValueChange={(value) =>
             setInsumoForm((prev) => ({
               ...prev,
-              ds_tipo: value as CreateMatMedForm["ds_tipo"],
+              ds_tipo: value as any,
             }))
           }
+          disabled={loading || categories.length === 0}
         >
-          <SelectTrigger>
-            {insumoForm.ds_tipo
-              ? categories.find(
-                  (categoria) =>
-                    categoria.cd_tipo === insumoForm.ds_tipo
-                )?.ds_tipo
-              : "Selecione uma categoria"}
+          <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm">
+            <SelectValue placeholder="Selecione uma categoria">
+              {categoriaSelecionada ? categoriaSelecionada.ds_tipo : undefined}
+            </SelectValue>
           </SelectTrigger>
 
           <SelectContent>
@@ -164,37 +204,31 @@ export default function FormInsumo() {
         </Select>
       </div>
 
-      {/* Marca */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-semibold">
+          <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
             Marca
           </label>
 
           <Select
-            value={String(insumoForm.ds_marca || "")}
+            value={insumoForm.ds_marca ? String(insumoForm.ds_marca) : ""}
             onValueChange={(value) =>
               setInsumoForm((prev) => ({
                 ...prev,
                 ds_marca: Number(value),
               }))
             }
+            disabled={loading || brands.length === 0}
           >
-            <SelectTrigger>
-              {insumoForm.ds_marca
-                ? brands.find(
-                    (marca) =>
-                      marca.cd_marca === insumoForm.ds_marca
-                  )?.ds_marca
-                : "Selecione"}
+            <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm">
+              <SelectValue placeholder="Selecione uma marca">
+                {marcaSelecionada ? marcaSelecionada.ds_marca : undefined}
+              </SelectValue>
             </SelectTrigger>
 
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>
-                  Marcas
-                </SelectLabel>
-
+                <SelectLabel>Marcas</SelectLabel>
                 {brands.map((marca) => (
                   <SelectItem
                     key={marca.cd_marca}
@@ -207,11 +241,9 @@ export default function FormInsumo() {
             </SelectContent>
           </Select>
         </div>
-
         <div />
       </div>
 
-      {/* TISS + TUSS */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InputField
           label="Código TISS"
@@ -224,6 +256,7 @@ export default function FormInsumo() {
               cd_tiss: event.target.value,
             }))
           }
+          disabled={loading}
         />
 
         <InputField
@@ -237,10 +270,10 @@ export default function FormInsumo() {
               cd_tuss: event.target.value,
             }))
           }
+          disabled={loading}
         />
       </div>
 
-      {/* SIMPRO + BRASÍNDICE */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <InputField
           label="Código SIMPRO"
@@ -253,6 +286,7 @@ export default function FormInsumo() {
               cd_simpro: event.target.value,
             }))
           }
+          disabled={loading}
         />
 
         <InputField
@@ -266,11 +300,23 @@ export default function FormInsumo() {
               cd_brasindice: event.target.value,
             }))
           }
+          disabled={loading}
         />
       </div>
 
-      <button className="w-full bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg transition-colors">
-        Salvar Insumo
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Salvando Insumo...
+          </>
+        ) : (
+          "Salvar Insumo"
+        )}
       </button>
     </form>
   )

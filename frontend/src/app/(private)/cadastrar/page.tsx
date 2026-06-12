@@ -1,14 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Package, Layers, Factory } from "lucide-react"
+import { Package, Layers, Factory, TagIcon } from "lucide-react"
 
 import FormInsumo from "@/components/cadastro/FormInsumo"
 import FormLote from "@/components/cadastro/FormLote"
+import FormMarca from "@/components/cadastro/FormMarca"
 import FormFabricante from "@/components/cadastro/FormFabricante"
 
 
-type Tab = "insumo" | "lote" | "fabricante"
+type Tab = "insumo" | "lote" | "fabricante" | "marca"
 
 export default function CadastroPage() {
   const [activeTab, setActiveTab] = useState<Tab>("insumo")
@@ -65,6 +66,19 @@ export default function CadastroPage() {
           <Factory size={16} />
           Fabricante
         </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("marca")}
+          className={`hover:cursor-pointer flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
+            activeTab === "marca"
+              ? "bg-sky-800 text-zinc-50  shadow-sm"
+              : "text-zinc-500"
+          }`}
+        >
+          <TagIcon size={16} />
+          Marca
+        </button>
       </div>
 
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 md:p-8 shadow-sm">
@@ -73,6 +87,8 @@ export default function CadastroPage() {
         {activeTab === "lote" && <FormLote />}
 
         {activeTab === "fabricante" && <FormFabricante />}
+
+        {activeTab === "marca" && <FormMarca />} 
       </div>
     </div>
     

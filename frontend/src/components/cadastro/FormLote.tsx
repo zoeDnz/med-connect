@@ -1,12 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import {
-  AlertCircle,
-  Calendar,
-  Hash,
-  Layers,
-} from "lucide-react"
+import { AlertCircle, Calendar, Hash, Layers, Loader2, CheckCircle2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 import {
   Select,
@@ -15,6 +11,7 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select"
 
 import InputField from "./InputField"
@@ -30,8 +27,13 @@ import servicesGetMatMed from "@/server/(GET)-mat-med"
 import servicesCreateLote from "@/server/(POST)-lote"
 
 export default function FormLote() {
+  const router = useRouter()
   const [fabricantes, setFabricantes] = useState<Fabricante[]>([])
   const [materiais, setMateriais] = useState<MatMed[]>([])
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   const [loteForm, setLoteForm] = useState<CreateLoteForm>({
     ds_lote: "",
@@ -52,25 +54,18 @@ export default function FormLote() {
           servicesGetMatMed(),
         ])
 
-      if (
-        responseFabricantes &&
-        !("isError" in responseFabricantes)
-      ) {
+      if (responseFabricantes && !("isError" in responseFabricantes)) {
         setFabricantes(responseFabricantes)
       }
 
-      if (
-        responseMateriais &&
-        !("isError" in responseMateriais)
-      ) {
+      if (responseMateriais && !("isError" in responseMateriais)) {
         setMateriais(responseMateriais)
       }
     }
 
     initialize()
 
-    const userId =
-      Number(localStorage.getItem("userId") || 0)
+    const userId = Number(localStorage.getItem("userId") || 0)
 
     setLoteForm((prev) => ({
       ...prev,
@@ -78,47 +73,39 @@ export default function FormLote() {
     }))
   }, [])
 
-
-  async function handleSubmitLote(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
+  async function handleSubmitLote(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const dataFabricacao = new Date(loteForm.dt_fabricacao)
-
-    if (dataFabricacao > new Date()) {
-      alert("A data de fabricação não pode ser futura.")
+    // Correção: Envolvendo o valor em String() para evitar o erro do TypeScript
+    if (!String(loteForm.ds_lote).trim()) {
+      setError("A identificação do lote não pode estar vazia.")
       return
     }
 
-    const hoje = new Date()
-    hoje.setHours(0, 0, 0, 0)
-
-    const dataValidade = new Date(loteForm.dt_validade)
-
-    if (dataValidade < hoje) {
-      alert("Não é permitido cadastrar lotes vencidos.")
+    if (!loteForm.cd_material) {
+      setError("Por favor, selecione um insumo para vincular ao lote.")
       return
     }
 
-    if (
-      loteForm.dt_validade &&
-      loteForm.dt_fabricacao &&
-      loteForm.dt_validade <= loteForm.dt_fabricacao.split("T")[0]
-    ) {
-      alert(
-        "A data de validade deve ser posterior à data de fabricação."
-      )
-      return
-    }
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
 
     const response = await servicesCreateLote(loteForm)
 
-    if ("isError" in response) {
-      console.error(response.message)
+    setLoading(false)
+
+    if (response && "isError" in response) {
+      if ("status" in response && response.status === 401) {
+        setError("Sessão expirada. Por favor, faça login novamente.")
+      } else {
+        setError("Erro ao cadastrar o lote. Tente novamente mais tarde.")
+      }
       return
     }
 
+    setSuccess(true)
+    
     setLoteForm((prev) => ({
       ...prev,
       ds_lote: "",
@@ -126,17 +113,33 @@ export default function FormLote() {
       dt_validade: "",
       qtd_lote: 0,
     }))
+
+    setTimeout(() => {
+      router.refresh()
+    }, 2000)
   }
 
   return (
-    <form
-      className="space-y-6"
-      onSubmit={handleSubmitLote}
-    >
+    <form className="space-y-6" onSubmit={handleSubmitLote}>
       <h2 className="text-lg font-bold flex items-center gap-2 text-sky-800">
         <Layers className="text-sky-800" />
         Cadastrar Lote
       </h2>
+
+      {/*  alertas feedback pro  usuario */}
+      {error && (
+        <div className="flex items-center gap-2 p-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-zinc-800 dark:text-red-400 border border-red-200 dark:border-red-900">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success && (
+        <div className="flex items-center gap-2 p-4 text-sm text-emerald-800 rounded-lg bg-emerald-50 dark:bg-zinc-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
+          <span>Lote registrado com sucesso!</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="flex flex-col gap-1.5">
@@ -145,28 +148,22 @@ export default function FormLote() {
           </label>
 
           <Select
-            value={String(loteForm.cd_material || "")}
+            value={loteForm.cd_material ? String(loteForm.cd_material) : undefined}
             onValueChange={(value) =>
               setLoteForm((prev) => ({
                 ...prev,
                 cd_material: Number(value),
               }))
             }
-            disabled={materiais.length === 0}
+            disabled={loading || materiais.length === 0}
           >
             <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm">
-              {loteForm.cd_material
-                ? materiais.find(
-                    (material) =>
-                      material.cd_mat === loteForm.cd_material
-                  )?.ds_mat
-                : "Selecione o insumo"}
+              <SelectValue placeholder="Selecione o insumo" />
             </SelectTrigger>
 
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Insumos</SelectLabel>
-
                 {materiais.map((material) => (
                   <SelectItem
                     key={material.cd_mat}
@@ -191,29 +188,25 @@ export default function FormLote() {
               ds_lote: event.target.value,
             }))
           }
+          disabled={loading}
+          required
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-       <InputField
-        label="Data de Fabricação"
-        icon={Calendar}
-        type="datetime-local"
-        max={
-          new Date(
-            Date.now() - new Date().getTimezoneOffset() * 60000
-          )
-            .toISOString()
-            .slice(0, 16)
-        }
-        value={loteForm.dt_fabricacao}
-        onChange={(event) =>
-          setLoteForm((prev) => ({
-            ...prev,
-            dt_fabricacao: event.target.value,
-          }))
-        }
-      />
+        <InputField
+          label="Data de Fabricação"
+          icon={Calendar}
+          type="datetime-local"
+          value={loteForm.dt_fabricacao}
+          onChange={(event) =>
+            setLoteForm((prev) => ({
+              ...prev,
+              dt_fabricacao: event.target.value,
+            }))
+          }
+          disabled={loading}
+        />
 
         <InputField
           label="Data de Validade"
@@ -226,6 +219,7 @@ export default function FormLote() {
               dt_validade: event.target.value,
             }))
           }
+          disabled={loading}
         />
       </div>
 
@@ -236,28 +230,22 @@ export default function FormLote() {
           </label>
 
           <Select
-            value={String(loteForm.fabricante || "")}
+            value={loteForm.fabricante ? String(loteForm.fabricante) : undefined}
             onValueChange={(value) =>
               setLoteForm((prev) => ({
                 ...prev,
                 fabricante: Number(value),
               }))
             }
-            disabled={fabricantes.length === 0}
+            disabled={loading || fabricantes.length === 0}
           >
             <SelectTrigger className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-sm">
-              {loteForm.fabricante
-                ? fabricantes.find(
-                    (fabricante) =>
-                      fabricante.cd_fabricante === loteForm.fabricante
-                  )?.ds_fabricante
-                : "Selecione o fabricante"}
+              <SelectValue placeholder="Selecione o fabricante" />
             </SelectTrigger>
 
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Fabricantes</SelectLabel>
-
                 {fabricantes.map((item) => (
                   <SelectItem
                     key={item.cd_fabricante}
@@ -282,6 +270,7 @@ export default function FormLote() {
               qtd_lote: Number(event.target.value),
             }))
           }
+          disabled={loading}
         />
       </div>
 
@@ -296,12 +285,23 @@ export default function FormLote() {
               unidade_med: event.target.value,
             }))
           }
+          disabled={loading}
         />
-
       </div>
 
-      <button className="w-full bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer">
-        Registrar Lote
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full bg-sky-950 hover:bg-sky-900 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Registrando Lote...
+          </>
+        ) : (
+          "Registrar Lote"
+        )}
       </button>
     </form>
   )
